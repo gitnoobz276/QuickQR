@@ -191,13 +191,15 @@ function generateQR(){
         height:220
     });
 
-    setTimeout(() => {
+   setTimeout(() => {
 
-        const img = qrContainer.querySelector("img");
+    const canvas = qrContainer.querySelector("canvas");
 
-        currentQRImage = img.src;
+    if(canvas){
+        currentQRImage = canvas.toDataURL("image/png");
+    }
 
-    },100);
+},100);
 
     document.getElementById("afterGenerate").classList.remove("hidden");
 }

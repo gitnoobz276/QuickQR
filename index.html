@@ -135,6 +135,41 @@
             id="urlInput" 
             placeholder="https://example.com"
         >
+
+        <button onclick="generateQR()">Generate QR Code</button>
+
+        <div id="qrcode"></div>
+
+        <div id="afterGenerate" class="hidden">
+
+            <p class="message">
+                Screenshot your QR code so you can use it anywhere!
+            </p>
+
+            <input 
+                type="text" 
+                id="qrName" 
+                placeholder="Enter QR Code Name"
+            >
+
+            <button onclick="saveQR()">Save QR Code</button>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>My Creations</h2>
+
+        <div id="creations" class="creation-grid"></div>
+    </div>
+
+</div>
+
+<script>
+
+let currentQRImage = "";
+let currentURL = "";
+
 function generateQR(){
 
     const url = document.getElementById("urlInput").value;
@@ -177,37 +212,17 @@ function generateQR(){
     document.getElementById("afterGenerate").classList.remove("hidden");
 }
 
-    currentURL = url;
-
-    const qrContainer = document.getElementById("qrcode");
-
-    qrContainer.innerHTML = "";
-
-    new QRCode(qrContainer,{
-        text:url,
-        width:220,
-        height:220
-    });
-
-   setTimeout(() => {
-
-    const canvas = qrContainer.querySelector("canvas");
-
-    if(canvas){
-        currentQRImage = canvas.toDataURL("image/png");
-    }
-
-},100);
-
-    document.getElementById("afterGenerate").classList.remove("hidden");
-}
-
 function saveQR(){
 
     const name = document.getElementById("qrName").value;
 
     if(name.trim() === ""){
         alert("Please enter a QR code name!");
+        return;
+    }
+
+    if(currentQRImage === ""){
+        alert("Please generate a QR code first!");
         return;
     }
 

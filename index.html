@@ -6,6 +6,7 @@
 <title>QuickQR</title>
 
 <link rel="icon" type="image/png" href="favicon.png">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
@@ -99,6 +100,7 @@ button:hover{
     margin-top:25px;
     display:flex;
     justify-content:center;
+    position:relative;
 }
 
 .message{
@@ -166,6 +168,7 @@ button:hover{
 .yellow{background:yellow;}
 .green{background:green;}
 .blue{background:blue;}
+.black{background:black;}
 
 .modal{
     position:fixed;
@@ -204,6 +207,18 @@ button:hover{
 .faq-item h3{
     margin-bottom:10px;
     color:#93c5fd;
+}
+
+.favicon-logo{
+    position:absolute;
+    width:45px;
+    height:45px;
+    background:white;
+    border-radius:12px;
+    padding:5px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
 }
 
 @media(max-width:700px){
@@ -255,7 +270,7 @@ color:#93c5fd;
 font-size:0.95rem;
 text-align:center;
 ">
-*Note: Before generating your QR code, if you wish, you can select a colour and then generate. After generation, if you want to pick another colour, then click another colour you desire and press generate again.
+*Note: Before generating your QR code, if you wish, you can select a colour and then generate. After generation, if you want to pick another colour, then click another colour you desire and click on "Generate QR Code" again.
 </p>
 
 <button onclick="generateQR()">Generate QR Code</button>
@@ -266,6 +281,7 @@ text-align:center;
     <div class="color yellow" onclick="setQRColor('yellow')"></div>
     <div class="color green" onclick="setQRColor('green')"></div>
     <div class="color blue" onclick="setQRColor('blue')"></div>
+    <div class="color black" onclick="setQRColor('black')"></div>
 </div>
 
 <div id="qrcode"></div>
@@ -408,6 +424,27 @@ function setQRColor(color){
     currentColor = color;
 }
 
+function generateDescription(url){
+
+    if(url.includes("youtube")){
+        return "This QR code links directly to a YouTube video or channel for watching content online.";
+    }
+
+    if(url.includes("github")){
+        return "This QR code opens a GitHub project or developer repository.";
+    }
+
+    if(url.includes("google")){
+        return "This QR code redirects users to a Google webpage or online service.";
+    }
+
+    if(url.includes("roblox")){
+        return "This QR code leads to a Roblox game, profile or Roblox-related webpage.";
+    }
+
+    return "This QR code redirects users to a website and allows quick access online.";
+}
+
 function generateQR(){
 
     const url = document.getElementById("urlInput").value;
@@ -431,6 +468,20 @@ function generateQR(){
         colorLight:"#ffffff"
     });
 
+    try{
+
+        const domain = new URL(url).hostname;
+
+        const favicon = document.createElement("img");
+
+        favicon.src = `https://www.google.com/s2/favicons?sz=64&domain=${domain}`;
+
+        favicon.className = "favicon-logo";
+
+        qrContainer.appendChild(favicon);
+
+    }catch(error){}
+
     setTimeout(() => {
 
         const canvas = qrContainer.querySelector("canvas");
@@ -442,7 +493,20 @@ function generateQR(){
             tempCanvas.height = canvas.height;
 
             const ctx = tempCanvas.getContext("2d");
+
             ctx.drawImage(canvas,0,0);
+
+            const favicon = qrContainer.querySelector(".favicon-logo");
+
+            if(favicon){
+
+                ctx.fillStyle = "white";
+                ctx.beginPath();
+                ctx.roundRect(87,87,46,46,10);
+                ctx.fill();
+
+                ctx.drawImage(favicon,92,92,36,36);
+            }
 
             currentQRImage = tempCanvas.toDataURL("image/png");
         }
@@ -468,7 +532,7 @@ function saveQR(){
         image:currentQRImage,
         url:currentURL,
         created:new Date().toLocaleString(),
-        desc:"This QR code instantly redirects users to the selected website in a fast and modern way."
+        desc:generateDescription(currentURL)
     });
 
     localStorage.setItem("qrCreations",JSON.stringify(creations));

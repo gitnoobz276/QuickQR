@@ -100,7 +100,6 @@ button:hover{
     margin-top:25px;
     display:flex;
     justify-content:center;
-    position:relative;
 }
 
 .message{
@@ -207,18 +206,6 @@ button:hover{
 .faq-item h3{
     margin-bottom:10px;
     color:#93c5fd;
-}
-
-.favicon-logo{
-    position:absolute;
-    width:45px;
-    height:45px;
-    background:white;
-    border-radius:12px;
-    padding:5px;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
 }
 
 @media(max-width:700px){
@@ -332,7 +319,7 @@ placeholder="Enter QR Code Name"
 
 <div class="faq-item">
 <h3>Do i have to sign in or pay subscriptions to use this app?</h3>
-<p>No, you make codes anonymously and no, i will ensure everything in this app is free to use. I came here to make lives easier, not steal it from them.</p>
+<p>No, you make codes anonymously and everything is completely free to use.</p>
 </div>
 
 </div>
@@ -351,7 +338,7 @@ margin-bottom:25px;
 line-height:1.8;
 font-size:1.05rem;
 ">
-Watch the full QuickQR tutorial below to learn how to create, customize and save your QR codes.
+Watch the full QuickQR tutorial below.
 </p>
 
 <div style="
@@ -426,23 +413,21 @@ function setQRColor(color){
 
 function generateDescription(url){
 
-    if(url.includes("youtube")){
-        return "This QR code links directly to a YouTube video or channel for watching content online.";
-    }
+    try{
 
-    if(url.includes("github")){
-        return "This QR code opens a GitHub project or developer repository.";
-    }
+        const domain = new URL(url).hostname
+        .replace("www.","")
+        .split(".")[0];
 
-    if(url.includes("google")){
-        return "This QR code redirects users to a Google webpage or online service.";
-    }
+        const cleanName =
+        domain.charAt(0).toUpperCase() + domain.slice(1);
 
-    if(url.includes("roblox")){
-        return "This QR code leads to a Roblox game, profile or Roblox-related webpage.";
-    }
+        return `This QR code redirects users to ${cleanName}, allowing quick and easy access to the website online.`;
 
-    return "This QR code redirects users to a website and allows quick access online.";
+    }catch(error){
+
+        return "This QR code redirects users to a website and allows quick online access.";
+    }
 }
 
 function generateQR(){
@@ -491,7 +476,7 @@ function generateQR(){
 
                 favicon.crossOrigin = "anonymous";
 
-                favicon.src = `https://www.google.com/s2/favicons?sz=64&domain=${domain}`;
+                favicon.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 
                 favicon.onload = () => {
 
@@ -510,9 +495,9 @@ function generateQR(){
                     finalImg.src = currentQRImage;
 
                     finalImg.style.width = "220px";
-                    finalImg.style.borderRadius = "12px";
                     finalImg.style.background = "white";
                     finalImg.style.padding = "10px";
+                    finalImg.style.borderRadius = "12px";
 
                     qrContainer.appendChild(finalImg);
                 };
@@ -520,6 +505,19 @@ function generateQR(){
                 favicon.onerror = () => {
 
                     currentQRImage = tempCanvas.toDataURL("image/png");
+
+                    qrContainer.innerHTML = "";
+
+                    const finalImg = document.createElement("img");
+
+                    finalImg.src = currentQRImage;
+
+                    finalImg.style.width = "220px";
+                    finalImg.style.background = "white";
+                    finalImg.style.padding = "10px";
+                    finalImg.style.borderRadius = "12px";
+
+                    qrContainer.appendChild(finalImg);
                 };
 
             }catch(error){
@@ -555,6 +553,8 @@ function saveQR(){
     localStorage.setItem("qrCreations",JSON.stringify(creations));
 
     loadCreations();
+
+    document.getElementById("qrName").value = "";
 
     alert("QR Code Saved!");
 }
@@ -602,6 +602,7 @@ function openInfo(item){
 }
 
 function closeModal(){
+
     document.getElementById("modal").classList.add("hidden");
     document.getElementById("modal").style.display = "none";
 }

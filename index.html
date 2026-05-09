@@ -12,154 +12,118 @@
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
-    background:linear-gradient(135deg,#0f172a,#1e293b);
-    min-height:100vh;
-    color:white;
-    padding:20px;
-}
-
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.15);
-    backdrop-filter:blur(10px);
-    padding:20px;
-    border-radius:20px;
-    margin-bottom:30px;
-    flex-wrap:wrap;
-}
-
-.logo{
-    font-size:2rem;
-    font-weight:bold;
-}
-
-.nav-links{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-}
-
-.nav-links button{
-    background:#3b82f6;
-    border:none;
-    color:white;
-    padding:10px 18px;
-    border-radius:12px;
-    cursor:pointer;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+min-height:100vh;
+color:white;
+padding:20px;
 }
 
 .container{
-    max-width:1000px;
-    margin:auto;
+max-width:1100px;
+margin:auto;
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px;
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.15);
+backdrop-filter:blur(10px);
+border-radius:25px;
+margin-bottom:30px;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.logo{
+font-size:2.5rem;
+font-weight:bold;
+}
+
+.nav-links{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.nav-links button{
+background:#3b82f6;
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:14px;
+cursor:pointer;
+font-weight:bold;
 }
 
 .card{
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.15);
-    backdrop-filter:blur(10px);
-    border-radius:25px;
-    padding:30px;
-    margin-bottom:30px;
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.15);
+backdrop-filter:blur(10px);
+border-radius:25px;
+padding:30px;
+margin-bottom:30px;
+}
+
+h2{
+margin-bottom:20px;
 }
 
 input{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:15px;
-    margin-top:15px;
-    margin-bottom:20px;
-    font-size:1rem;
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+font-size:1rem;
+margin-bottom:20px;
 }
 
 button{
-    background:#3b82f6;
-    color:white;
-    border:none;
-    padding:14px 22px;
-    border-radius:15px;
-    cursor:pointer;
-    transition:0.3s;
+background:#3b82f6;
+color:white;
+border:none;
+padding:14px 22px;
+border-radius:15px;
+cursor:pointer;
+font-size:1rem;
+transition:0.3s;
 }
 
 button:hover{
-    transform:scale(1.05);
+transform:scale(1.05);
 }
 
-#qrcode{
-    margin-top:25px;
-    display:flex;
-    justify-content:center;
-}
-
-.message{
-    text-align:center;
-    margin-top:20px;
-    color:#93c5fd;
-}
-
-.creation-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-    margin-top:20px;
-}
-
-.creation-card{
-    background:rgba(255,255,255,0.08);
-    padding:20px;
-    border-radius:20px;
-    text-align:center;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-.creation-card:hover{
-    transform:translateY(-5px);
-}
-
-.creation-card img{
-    width:150px;
-    background:white;
-    padding:10px;
-    border-radius:12px;
-}
-
-.creation-name{
-    margin-top:15px;
-    font-size:1.2rem;
-    font-weight:bold;
-}
-
-.hidden{
-    display:none !important;
+.note{
+margin-top:20px;
+line-height:1.8;
+text-align:center;
+color:#93c5fd;
 }
 
 .palette{
-    display:flex;
-    gap:15px;
-    justify-content:center;
-    margin-top:20px;
-    margin-bottom:20px;
-    flex-wrap:wrap;
+display:flex;
+justify-content:center;
+gap:15px;
+margin-top:25px;
+margin-bottom:25px;
+flex-wrap:wrap;
 }
 
 .color{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    cursor:pointer;
-    border:3px solid white;
+width:42px;
+height:42px;
+border-radius:50%;
+cursor:pointer;
+border:3px solid white;
 }
 
 .red{background:red;}
@@ -169,55 +133,145 @@ button:hover{
 .blue{background:blue;}
 .black{background:black;}
 
+#qrcode{
+display:flex;
+justify-content:center;
+margin-top:20px;
+}
+
+.message{
+margin-top:20px;
+text-align:center;
+color:#93c5fd;
+}
+
+.hidden{
+display:none;
+}
+
+.creation-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.creation-card{
+background:rgba(255,255,255,0.08);
+padding:20px;
+border-radius:20px;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+}
+
+.creation-card:hover{
+transform:translateY(-5px);
+}
+
+.creation-card img{
+width:160px;
+background:white;
+padding:10px;
+border-radius:12px;
+}
+
+.creation-name{
+margin-top:15px;
+font-size:1.2rem;
+font-weight:bold;
+}
+
 .modal{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.7);
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    z-index:1000;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+z-index:999;
 }
 
 .modal-content{
-    background:#1e293b;
-    padding:30px;
-    border-radius:25px;
-    max-width:500px;
-    width:100%;
-    text-align:center;
+background:#1e293b;
+padding:30px;
+border-radius:25px;
+max-width:650px;
+width:100%;
+text-align:center;
+max-height:90vh;
+overflow:auto;
 }
 
 .modal-content img{
-    width:220px;
-    background:white;
-    padding:10px;
-    border-radius:12px;
-    margin-bottom:20px;
+width:220px;
+background:white;
+padding:10px;
+border-radius:12px;
+margin-bottom:20px;
 }
 
-.faq-item{
-    margin-top:25px;
+.share-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
+gap:20px;
+margin-top:25px;
 }
 
-.faq-item h3{
-    margin-bottom:10px;
-    color:#93c5fd;
+.share-btn{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:10px;
+cursor:pointer;
+}
+
+.share-btn img{
+width:60px;
+height:60px;
+border-radius:18px;
+background:white;
+padding:10px;
+}
+
+.share-btn span{
+font-size:0.95rem;
+font-weight:bold;
+}
+
+.close-btn{
+margin-top:25px;
+}
+
+iframe{
+width:100%;
+height:500px;
+border:none;
+border-radius:20px;
+margin-top:20px;
 }
 
 @media(max-width:700px){
 
-    .navbar{
-        flex-direction:column;
-        gap:20px;
-    }
+.logo{
+font-size:2rem;
+}
 
-    .nav-links{
-        justify-content:center;
-    }
+.navbar{
+flex-direction:column;
+}
+
+.creation-card img{
+width:120px;
+}
+
+.modal-content img{
+width:180px;
+}
 
 }
 
@@ -228,13 +282,15 @@ button:hover{
 <div class="container">
 
 <div class="navbar">
-    <div class="logo">QuickQR</div>
 
-    <div class="nav-links">
-        <button onclick="showPage('home')">Home</button>
-        <button onclick="showPage('faq')">FAQ</button>
-        <button onclick="showPage('tutorial')">Tutorial</button>
-    </div>
+<div class="logo">QuickQR</div>
+
+<div class="nav-links">
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('faq')">FAQ</button>
+<button onclick="showPage('tutorial')">Tutorial</button>
+</div>
+
 </div>
 
 <div id="homePage">
@@ -243,33 +299,22 @@ button:hover{
 
 <h2>Enter Your Website URL</h2>
 
-<input 
-type="text" 
-id="urlInput" 
-placeholder="https://example.com"
->
+<input type="text" id="urlInput" placeholder="https://example.com">
 
-<p style="
-margin-top:20px;
-margin-bottom:20px;
-line-height:1.8;
-color:#93c5fd;
-font-size:0.95rem;
-text-align:center;
-">
+<p class="note">
 *Note: Before generating your QR code, if you wish, you can select a colour and then generate. After generation, if you want to pick another colour, then click another colour you desire and click on "Generate QR Code" again.
 </p>
 
-<button onclick="generateQR()">Generate QR Code</button>
-
 <div class="palette">
-    <div class="color red" onclick="setQRColor('red')"></div>
-    <div class="color orange" onclick="setQRColor('orange')"></div>
-    <div class="color yellow" onclick="setQRColor('yellow')"></div>
-    <div class="color green" onclick="setQRColor('green')"></div>
-    <div class="color blue" onclick="setQRColor('blue')"></div>
-    <div class="color black" onclick="setQRColor('black')"></div>
+<div class="color red" onclick="setQRColor('red')"></div>
+<div class="color orange" onclick="setQRColor('orange')"></div>
+<div class="color yellow" onclick="setQRColor('yellow')"></div>
+<div class="color green" onclick="setQRColor('green')"></div>
+<div class="color blue" onclick="setQRColor('blue')"></div>
+<div class="color black" onclick="setQRColor('black')"></div>
 </div>
+
+<button onclick="generateQR()">Generate QR Code</button>
 
 <div id="qrcode"></div>
 
@@ -279,11 +324,7 @@ text-align:center;
 Screenshot your QR code so you can use it anywhere!
 </p>
 
-<input 
-type="text" 
-id="qrName" 
-placeholder="Enter QR Code Name"
->
+<input type="text" id="qrName" placeholder="Enter QR Code Name">
 
 <button onclick="saveQR()">Save QR Code</button>
 
@@ -307,20 +348,20 @@ placeholder="Enter QR Code Name"
 
 <h1>FAQ</h1>
 
-<div class="faq-item">
+<br>
+
 <h3>Does my qr codes save?</h3>
 <p>Yes, it autosaves.</p>
-</div>
 
-<div class="faq-item">
+<br><br>
+
 <h3>If i add a qr code in the website, go to another device, will be the same?</h3>
 <p>No, they do not be the same for different devices.</p>
-</div>
 
-<div class="faq-item">
+<br><br>
+
 <h3>Do i have to sign in or pay subscriptions to use this app?</h3>
-<p>No, you make codes anonymously and everything is completely free to use.</p>
-</div>
+<p>No, you make codes anonymously and no, i will ensure everything in this app is free to use. I came here to make lives easier, not steal it from them.</p>
 
 </div>
 
@@ -332,39 +373,7 @@ placeholder="Enter QR Code Name"
 
 <h1>Tutorial</h1>
 
-<p style="
-margin-top:20px;
-margin-bottom:25px;
-line-height:1.8;
-font-size:1.05rem;
-">
-Watch the full QuickQR tutorial below.
-</p>
-
-<div style="
-position:relative;
-padding-bottom:56.25%;
-height:0;
-overflow:hidden;
-border-radius:20px;
-">
-
-<iframe
-src="https://www.youtube.com/embed/C_dpYF1-GjU"
-title="QuickQR Tutorial"
-frameborder="0"
-allowfullscreen
-style="
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-border-radius:20px;
-">
-</iframe>
-
-</div>
+<iframe src="https://www.youtube.com/embed/C_dpYF1-GjU"></iframe>
 
 </div>
 
@@ -376,7 +385,9 @@ border-radius:20px;
 
 <div id="modalBody"></div>
 
-<button onclick="closeModal()">Close</button>
+<button class="close-btn" onclick="closeModal()">Close</button>
+
+</div>
 
 </div>
 
@@ -390,225 +401,321 @@ let currentColor = "black";
 
 function showPage(page){
 
-    document.getElementById("homePage").classList.add("hidden");
-    document.getElementById("faqPage").classList.add("hidden");
-    document.getElementById("tutorialPage").classList.add("hidden");
+document.getElementById("homePage").classList.add("hidden");
+document.getElementById("faqPage").classList.add("hidden");
+document.getElementById("tutorialPage").classList.add("hidden");
 
-    if(page === "home"){
-        document.getElementById("homePage").classList.remove("hidden");
-    }
+if(page === "home"){
+document.getElementById("homePage").classList.remove("hidden");
+}
 
-    if(page === "faq"){
-        document.getElementById("faqPage").classList.remove("hidden");
-    }
+if(page === "faq"){
+document.getElementById("faqPage").classList.remove("hidden");
+}
 
-    if(page === "tutorial"){
-        document.getElementById("tutorialPage").classList.remove("hidden");
-    }
+if(page === "tutorial"){
+document.getElementById("tutorialPage").classList.remove("hidden");
+}
+
 }
 
 function setQRColor(color){
-    currentColor = color;
+currentColor = color;
 }
 
 function generateDescription(url){
 
-    try{
+const lower = url.toLowerCase();
 
-        const domain = new URL(url).hostname
-        .replace("www.","")
-        .split(".")[0];
+if(lower.includes("youtube")){
+return "A video and content platform QR code that instantly opens YouTube content.";
+}
 
-        const cleanName =
-        domain.charAt(0).toUpperCase() + domain.slice(1);
+if(lower.includes("google")){
+return "A useful search and browsing QR code that quickly opens Google.";
+}
 
-        return `This QR code redirects users to ${cleanName}, allowing quick and easy access to the website online.`;
+if(lower.includes("chatgpt")){
+return "An AI powered QR code that instantly redirects users to ChatGPT.";
+}
 
-    }catch(error){
-
-        return "This QR code redirects users to a website and allows quick online access.";
-    }
+return "A smart custom QR code that quickly redirects users to the chosen website using QuickQR.";
 }
 
 function generateQR(){
 
-    const url = document.getElementById("urlInput").value;
+const url = document.getElementById("urlInput").value;
 
-    if(url.trim() === ""){
-        alert("Please enter a URL!");
-        return;
-    }
+if(url.trim() === ""){
+alert("Please enter a URL!");
+return;
+}
 
-    currentURL = url;
+currentURL = url;
 
-    const qrContainer = document.getElementById("qrcode");
+const qrContainer = document.getElementById("qrcode");
 
-    qrContainer.innerHTML = "";
+qrContainer.innerHTML = "";
 
-    new QRCode(qrContainer,{
-        text:url,
-        width:220,
-        height:220,
-        colorDark:currentColor,
-        colorLight:"#ffffff"
-    });
+new QRCode(qrContainer,{
+text:url,
+width:220,
+height:220,
+colorDark:currentColor,
+colorLight:"#ffffff"
+});
 
-    setTimeout(async () => {
+setTimeout(() => {
 
-        const canvas = qrContainer.querySelector("canvas");
+const canvas = qrContainer.querySelector("canvas");
 
-        if(!canvas) return;
+if(!canvas) return;
 
-        const tempCanvas = document.createElement("canvas");
+const tempCanvas = document.createElement("canvas");
 
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
+tempCanvas.width = canvas.width;
+tempCanvas.height = canvas.height;
 
-        const ctx = tempCanvas.getContext("2d");
+const ctx = tempCanvas.getContext("2d");
 
-        ctx.drawImage(canvas,0,0);
+ctx.drawImage(canvas,0,0);
 
-        try{
+try{
 
-            const domain = new URL(url).hostname;
+const domain = new URL(url).hostname;
 
-            const faviconUrl =
-            `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+const faviconUrl =
+`https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 
-            const favicon = new Image();
+const favicon = new Image();
 
-            favicon.crossOrigin = "anonymous";
+favicon.crossOrigin = "anonymous";
 
-            favicon.onload = () => {
+favicon.onload = () => {
 
-                ctx.fillStyle = "white";
+ctx.fillStyle = "white";
 
-                ctx.beginPath();
-                ctx.roundRect(82,82,56,56,12);
-                ctx.fill();
+ctx.beginPath();
+ctx.roundRect(82,82,56,56,12);
+ctx.fill();
 
-                ctx.drawImage(favicon,92,92,36,36);
+ctx.drawImage(favicon,92,92,36,36);
 
-                currentQRImage = tempCanvas.toDataURL("image/png");
+currentQRImage = tempCanvas.toDataURL("image/png");
 
-                qrContainer.innerHTML = "";
+qrContainer.innerHTML = "";
 
-                const finalImg = document.createElement("img");
+const finalImg = document.createElement("img");
 
-                finalImg.src = currentQRImage;
+finalImg.src = currentQRImage;
 
-                finalImg.style.width = "220px";
-                finalImg.style.background = "white";
-                finalImg.style.padding = "10px";
-                finalImg.style.borderRadius = "12px";
+finalImg.style.width = "220px";
+finalImg.style.background = "white";
+finalImg.style.padding = "10px";
+finalImg.style.borderRadius = "12px";
 
-                qrContainer.appendChild(finalImg);
-            };
+qrContainer.appendChild(finalImg);
+};
 
-            favicon.onerror = () => {
+favicon.src = faviconUrl;
 
-                currentQRImage = tempCanvas.toDataURL("image/png");
+}catch(error){
 
-                qrContainer.innerHTML = "";
+currentQRImage = tempCanvas.toDataURL("image/png");
+}
 
-                const finalImg = document.createElement("img");
+},500);
 
-                finalImg.src = currentQRImage;
-
-                finalImg.style.width = "220px";
-                finalImg.style.background = "white";
-                finalImg.style.padding = "10px";
-                finalImg.style.borderRadius = "12px";
-
-                qrContainer.appendChild(finalImg);
-            };
-
-            favicon.src = faviconUrl;
-
-        }catch(error){
-
-            currentQRImage = tempCanvas.toDataURL("image/png");
-        }
-
-    },500);
-
-    document.getElementById("afterGenerate").classList.remove("hidden");
+document.getElementById("afterGenerate").classList.remove("hidden");
 }
 
 function saveQR(){
 
-    const name = document.getElementById("qrName").value;
+const name = document.getElementById("qrName").value;
 
-    if(name.trim() === ""){
-        alert("Please enter a QR code name!");
-        return;
-    }
+if(name.trim() === ""){
+alert("Please enter a QR code name!");
+return;
+}
 
-    const creations = JSON.parse(localStorage.getItem("qrCreations")) || [];
+const creations = JSON.parse(localStorage.getItem("qrCreations")) || [];
 
-    creations.push({
-        name:name,
-        image:currentQRImage,
-        url:currentURL,
-        created:new Date().toLocaleString(),
-        desc:generateDescription(currentURL)
-    });
+creations.push({
+name:name,
+image:currentQRImage,
+url:currentURL,
+created:new Date().toLocaleString(),
+desc:generateDescription(currentURL)
+});
 
-    localStorage.setItem("qrCreations",JSON.stringify(creations));
+localStorage.setItem("qrCreations",JSON.stringify(creations));
 
-    loadCreations();
+loadCreations();
 
-    document.getElementById("qrName").value = "";
-
-    alert("QR Code Saved!");
+alert("QR Code Saved!");
 }
 
 function loadCreations(){
 
-    const creationsDiv = document.getElementById("creations");
+const creationsDiv = document.getElementById("creations");
 
-    creationsDiv.innerHTML = "";
+creationsDiv.innerHTML = "";
 
-    const creations = JSON.parse(localStorage.getItem("qrCreations")) || [];
+const creations = JSON.parse(localStorage.getItem("qrCreations")) || [];
 
-    creations.forEach(item => {
+creations.forEach(item => {
 
-        const card = document.createElement("div");
+const card = document.createElement("div");
 
-        card.className = "creation-card";
+card.className = "creation-card";
 
-        card.innerHTML = `
-            <img src="${item.image}">
-            <div class="creation-name">${item.name}</div>
-        `;
+card.innerHTML = `
+<img src="${item.image}">
+<div class="creation-name">${item.name}</div>
+`;
 
-        card.onclick = () => {
-            openInfo(item);
-        };
+card.onclick = () => {
+openInfo(item);
+};
 
-        creationsDiv.appendChild(card);
+creationsDiv.appendChild(card);
 
-    });
+});
+
+}
+
+function createShareCard(item){
+
+const gradients = [
+"linear-gradient(135deg,#ff512f,#dd2476)",
+"linear-gradient(135deg,#2193b0,#6dd5ed)",
+"linear-gradient(135deg,#00b09b,#96c93d)",
+"linear-gradient(135deg,#8e2de2,#4a00e0)"
+];
+
+const randomGradient =
+gradients[Math.floor(Math.random() * gradients.length)];
+
+return `
+<div style="
+background:${randomGradient};
+padding:30px;
+border-radius:25px;
+text-align:center;
+color:white;
+">
+
+<h2 style="margin-bottom:20px;">${item.name}</h2>
+
+<img src="${item.image}" style="
+width:220px;
+background:white;
+padding:10px;
+border-radius:15px;
+">
+
+<p style="margin-top:20px;">
+${item.url}
+</p>
+
+<p style="margin-top:15px;font-weight:bold;">
+Look at the cool QR Code i made with QuickQR!
+</p>
+
+</div>
+`;
+}
+
+function sharePlatform(platform,item){
+
+const text =
+`Look at the cool QR Code i made with QuickQR! ${item.url}`;
+
+if(platform === "linkedin"){
+window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(item.url)}`);
+}
+
+if(platform === "facebook"){
+window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(item.url)}`);
+}
+
+if(platform === "instagram"){
+alert("Instagram only allows image posting through the mobile app. Download the QR image and upload it manually.");
+}
+
+if(platform === "youtube"){
+alert("Download the QR image and upload it as a YouTube community post.");
+}
+
+if(platform === "download"){
+
+const a = document.createElement("a");
+
+a.href = item.image;
+a.download = `${item.name}.png`;
+
+a.click();
+}
+
 }
 
 function openInfo(item){
 
-    document.getElementById("modal").classList.remove("hidden");
-    document.getElementById("modal").style.display = "flex";
+document.getElementById("modal").classList.remove("hidden");
 
-    document.getElementById("modalBody").innerHTML = `
-        <img src="${item.image}">
-        <h2>${item.name}</h2>
-        <p style="margin-top:15px;"><b>URL:</b> ${item.url}</p>
-        <p style="margin-top:15px;"><b>Created:</b> ${item.created}</p>
-        <p style="margin-top:15px;"><b>AI Description:</b> ${item.desc}</p>
-    `;
+document.getElementById("modalBody").innerHTML = `
+
+<img src="${item.image}">
+
+<h2>${item.name}</h2>
+
+<p style="margin-top:15px;">
+<b>URL:</b> ${item.url}
+</p>
+
+<p style="margin-top:15px;">
+<b>Created:</b> ${item.created}
+</p>
+
+<p style="margin-top:15px;">
+<b>AI Description:</b> ${item.desc}
+</p>
+
+<div class="share-grid">
+
+<div class="share-btn" onclick='sharePlatform("linkedin",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/174/174857.png">
+<span>LinkedIn</span>
+</div>
+
+<div class="share-btn" onclick='sharePlatform("facebook",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
+<span>Facebook</span>
+</div>
+
+<div class="share-btn" onclick='sharePlatform("youtube",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+<span>YouTube</span>
+</div>
+
+<div class="share-btn" onclick='sharePlatform("instagram",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+<span>Instagram</span>
+</div>
+
+<div class="share-btn" onclick='sharePlatform("download",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/724/724933.png">
+<span>Download</span>
+</div>
+
+</div>
+
+`;
+
 }
 
 function closeModal(){
-
-    document.getElementById("modal").classList.add("hidden");
-    document.getElementById("modal").style.display = "none";
+document.getElementById("modal").classList.add("hidden");
 }
 
 loadCreations();

@@ -453,77 +453,81 @@ function generateQR(){
         colorLight:"#ffffff"
     });
 
-    setTimeout(() => {
+    setTimeout(async () => {
 
         const canvas = qrContainer.querySelector("canvas");
 
-        if(canvas){
+        if(!canvas) return;
 
-            const tempCanvas = document.createElement("canvas");
+        const tempCanvas = document.createElement("canvas");
 
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
 
-            const ctx = tempCanvas.getContext("2d");
+        const ctx = tempCanvas.getContext("2d");
 
-            ctx.drawImage(canvas,0,0);
+        ctx.drawImage(canvas,0,0);
 
-            try{
+        try{
 
-                const domain = new URL(url).hostname;
+            const domain = new URL(url).hostname;
 
-                const favicon = new Image();
+            const faviconUrl =
+            `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 
-                favicon.crossOrigin = "anonymous";
+            const favicon = new Image();
 
-                favicon.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+            favicon.crossOrigin = "anonymous";
 
-                favicon.onload = () => {
+            favicon.onload = () => {
 
-                    ctx.fillStyle = "white";
+                ctx.fillStyle = "white";
 
-                    ctx.fillRect(85,85,50,50);
+                ctx.beginPath();
+                ctx.roundRect(82,82,56,56,12);
+                ctx.fill();
 
-                    ctx.drawImage(favicon,92,92,36,36);
-
-                    currentQRImage = tempCanvas.toDataURL("image/png");
-
-                    qrContainer.innerHTML = "";
-
-                    const finalImg = document.createElement("img");
-
-                    finalImg.src = currentQRImage;
-
-                    finalImg.style.width = "220px";
-                    finalImg.style.background = "white";
-                    finalImg.style.padding = "10px";
-                    finalImg.style.borderRadius = "12px";
-
-                    qrContainer.appendChild(finalImg);
-                };
-
-                favicon.onerror = () => {
-
-                    currentQRImage = tempCanvas.toDataURL("image/png");
-
-                    qrContainer.innerHTML = "";
-
-                    const finalImg = document.createElement("img");
-
-                    finalImg.src = currentQRImage;
-
-                    finalImg.style.width = "220px";
-                    finalImg.style.background = "white";
-                    finalImg.style.padding = "10px";
-                    finalImg.style.borderRadius = "12px";
-
-                    qrContainer.appendChild(finalImg);
-                };
-
-            }catch(error){
+                ctx.drawImage(favicon,92,92,36,36);
 
                 currentQRImage = tempCanvas.toDataURL("image/png");
-            }
+
+                qrContainer.innerHTML = "";
+
+                const finalImg = document.createElement("img");
+
+                finalImg.src = currentQRImage;
+
+                finalImg.style.width = "220px";
+                finalImg.style.background = "white";
+                finalImg.style.padding = "10px";
+                finalImg.style.borderRadius = "12px";
+
+                qrContainer.appendChild(finalImg);
+            };
+
+            favicon.onerror = () => {
+
+                currentQRImage = tempCanvas.toDataURL("image/png");
+
+                qrContainer.innerHTML = "";
+
+                const finalImg = document.createElement("img");
+
+                finalImg.src = currentQRImage;
+
+                finalImg.style.width = "220px";
+                finalImg.style.background = "white";
+                finalImg.style.padding = "10px";
+                finalImg.style.borderRadius = "12px";
+
+                qrContainer.appendChild(finalImg);
+            };
+
+            favicon.src = faviconUrl;
+
+        }catch(error){
+
+            currentQRImage = tempCanvas.toDataURL("image/png");
         }
 
     },500);

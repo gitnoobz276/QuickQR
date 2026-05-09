@@ -468,20 +468,6 @@ function generateQR(){
         colorLight:"#ffffff"
     });
 
-    try{
-
-        const domain = new URL(url).hostname;
-
-        const favicon = document.createElement("img");
-
-        favicon.src = `https://www.google.com/s2/favicons?sz=64&domain=${domain}`;
-
-        favicon.className = "favicon-logo";
-
-        qrContainer.appendChild(favicon);
-
-    }catch(error){}
-
     setTimeout(() => {
 
         const canvas = qrContainer.querySelector("canvas");
@@ -489,6 +475,7 @@ function generateQR(){
         if(canvas){
 
             const tempCanvas = document.createElement("canvas");
+
             tempCanvas.width = canvas.width;
             tempCanvas.height = canvas.height;
 
@@ -496,19 +483,49 @@ function generateQR(){
 
             ctx.drawImage(canvas,0,0);
 
-            const favicon = qrContainer.querySelector(".favicon-logo");
+            try{
 
-            if(favicon){
+                const domain = new URL(url).hostname;
 
-                ctx.fillStyle = "white";
-                ctx.beginPath();
-                ctx.roundRect(87,87,46,46,10);
-                ctx.fill();
+                const favicon = new Image();
 
-                ctx.drawImage(favicon,92,92,36,36);
+                favicon.crossOrigin = "anonymous";
+
+                favicon.src = `https://www.google.com/s2/favicons?sz=64&domain=${domain}`;
+
+                favicon.onload = () => {
+
+                    ctx.fillStyle = "white";
+
+                    ctx.fillRect(85,85,50,50);
+
+                    ctx.drawImage(favicon,92,92,36,36);
+
+                    currentQRImage = tempCanvas.toDataURL("image/png");
+
+                    qrContainer.innerHTML = "";
+
+                    const finalImg = document.createElement("img");
+
+                    finalImg.src = currentQRImage;
+
+                    finalImg.style.width = "220px";
+                    finalImg.style.borderRadius = "12px";
+                    finalImg.style.background = "white";
+                    finalImg.style.padding = "10px";
+
+                    qrContainer.appendChild(finalImg);
+                };
+
+                favicon.onerror = () => {
+
+                    currentQRImage = tempCanvas.toDataURL("image/png");
+                };
+
+            }catch(error){
+
+                currentQRImage = tempCanvas.toDataURL("image/png");
             }
-
-            currentQRImage = tempCanvas.toDataURL("image/png");
         }
 
     },500);

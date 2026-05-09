@@ -74,10 +74,6 @@ padding:30px;
 margin-bottom:30px;
 }
 
-h2{
-margin-bottom:20px;
-}
-
 input{
 width:100%;
 padding:15px;
@@ -217,8 +213,8 @@ margin-bottom:20px;
 
 .share-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(70px,1fr));
+gap:15px;
 margin-top:25px;
 }
 
@@ -226,20 +222,20 @@ margin-top:25px;
 display:flex;
 flex-direction:column;
 align-items:center;
-gap:10px;
+gap:8px;
 cursor:pointer;
 }
 
 .share-btn img{
-width:60px;
-height:60px;
-padding:10px;
+width:48px;
+height:48px;
+padding:8px;
 background:white;
-border-radius:18px;
+border-radius:14px;
 }
 
 .share-btn span{
-font-size:0.9rem;
+font-size:0.8rem;
 font-weight:bold;
 }
 
@@ -257,6 +253,10 @@ margin-top:20px;
 
 @media(max-width:700px){
 
+body{
+padding:12px;
+}
+
 .navbar{
 flex-direction:column;
 }
@@ -266,11 +266,29 @@ font-size:2rem;
 }
 
 .creation-card img{
-width:120px;
+width:110px;
+}
+
+.modal-content{
+padding:20px;
 }
 
 .modal-content img{
-width:180px;
+width:170px;
+}
+
+.share-grid{
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+}
+
+.share-btn img{
+width:42px;
+height:42px;
+}
+
+.share-btn span{
+font-size:0.72rem;
 }
 
 }
@@ -561,7 +579,8 @@ name:name,
 image:currentQRImage,
 url:currentURL,
 created:new Date().toLocaleString(),
-desc:generateDescription(currentURL)
+desc:generateDescription(currentURL),
+color:currentColor
 });
 
 localStorage.setItem(
@@ -606,7 +625,73 @@ creationsDiv.appendChild(card);
 
 }
 
-function sharePlatform(platform,item){
+function createShareImage(item){
+
+const canvas = document.createElement("canvas");
+canvas.width = 800;
+canvas.height = 1000;
+
+const ctx = canvas.getContext("2d");
+
+const gradients = {
+red:["#ff4d4d","#b30000"],
+orange:["#ffb347","#ff6600"],
+yellow:["#ffe259","#ffa751"],
+green:["#56ab2f","#a8e063"],
+blue:["#36d1dc","#5b86e5"],
+black:["#232526","#414345"]
+};
+
+const g = gradients[item.color] || gradients.blue;
+
+const gradient = ctx.createLinearGradient(0,0,800,1000);
+gradient.addColorStop(0,g[0]);
+gradient.addColorStop(1,g[1]);
+
+ctx.fillStyle = gradient;
+ctx.fillRect(0,0,800,1000);
+
+ctx.fillStyle = "white";
+ctx.font = "bold 45px Arial";
+ctx.textAlign = "center";
+
+ctx.fillText(item.name,400,100);
+
+ctx.font = "28px Arial";
+ctx.fillText(item.url,400,160);
+
+const qr = new Image();
+
+qr.src = item.image;
+
+return new Promise(resolve => {
+
+qr.onload = () => {
+
+ctx.drawImage(qr,220,240,360,360);
+
+ctx.font = "bold 36px Arial";
+
+ctx.fillText(
+"Look at the cool QR Code i made with QuickQR!",
+400,
+700
+);
+
+resolve(canvas.toDataURL("image/png"));
+
+};
+
+});
+
+}
+
+async function sharePlatform(platform,item){
+
+const shareImage = await createShareImage(item);
+
+const text =
+`Look at the cool QR Code i made with QuickQR! ${item.url}`;
 
 if(platform === "linkedin"){
 window.open(
@@ -621,32 +706,27 @@ window.open(
 }
 
 if(platform === "whatsapp"){
-
-const text =
-`Look at the cool QR Code i made with QuickQR! ${item.url}`;
-
 window.open(
 `https://wa.me/?text=${encodeURIComponent(text)}`
 );
-
 }
 
 if(platform === "download"){
 
 const a = document.createElement("a");
 
-a.href = item.image;
+a.href = shareImage;
 a.download = `${item.name}.png`;
 
 a.click();
 }
 
 if(platform === "instagram"){
-alert("Download the QR image and upload it manually to Instagram.");
+alert("Your custom QR image has been prepared. Download it and upload it to Instagram.");
 }
 
 if(platform === "youtube"){
-alert("Download the QR image and upload it as a YouTube post.");
+alert("Your custom QR image has been prepared. Download it and upload it as a YouTube post.");
 }
 
 }

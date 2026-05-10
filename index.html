@@ -8,6 +8,7 @@
 <link rel="icon" type="image/png" href="favicon.png">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 
 <style>
 *{
@@ -662,27 +663,77 @@ aiMessages.innerHTML += `<div class="aiMsg bot">Getting your answer...</div>`;
 aiInput.value = "";
 };
 
-let scannerStream;
+/* QR SCANNER */
 
-async function openScanner(){
+function openScanner(){
 
-const overlay = document.getElementById("scannerOverlay");
-overlay.style.display = "flex";
+    const input = document.createElement("input");
 
-try{
+    input.type = "file";
 
-scannerStream = await navigator.mediaDevices.getDisplayMedia({
-video:true
-});
+    input.accept = "image/*";
 
-document.getElementById("scannerVideo").srcObject = scannerStream;
+    input.onchange = async (e) => {
 
-}catch(err){
-alert("Screen sharing cancelled.");
+        const file = e.target.files[0];
+
+        if(!file) return;
+
+        const img = new Image();
+
+        img.src = URL.createObjectURL(file);
+
+        img.onload = async () => {
+
+            const canvas = document.createElement("canvas");
+
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            ctx.drawImage(img,0,0);
+
+            const imageData = ctx.getImageData(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            if(typeof jsQR === "undefined"){
+
+                alert("QR scanner library missing.");
+
+                return;
+
+            }
+
+            const code = jsQR(
+                imageData.data,
+                canvas.width,
+                canvas.height
+            );
+
+            if(code){
+
+                window.open(code.data,"_blank");
+
+            }else{
+
+                alert("No QR code found.");
+
+            }
+
+        };
+
+    };
+
+    input.click();
+
 }
-}
 
-function closeScanner(){
+function closeScanner(){}
 
 document.getElementById("scannerOverlay").style.display = "none";
 
@@ -694,5 +745,4 @@ scannerStream.getTracks().forEach(track=>track.stop());
 </script>
 
 </body>
-</htm
-```
+</html

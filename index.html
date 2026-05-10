@@ -1,3 +1,8 @@
+# QuickQR Fixed `index.html`
+
+Replace your entire `index.html` with this cleaned version.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +15,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -25,13 +29,13 @@ padding:20px;
 color:white;
 }
 
+.hidden{
+display:none !important;
+}
+
 .container{
 max-width:1100px;
 margin:auto;
-}
-
-.hidden{
-display:none !important;
 }
 
 .navbar{
@@ -49,7 +53,7 @@ gap:20px;
 }
 
 .logo{
-font-size:2.3rem;
+font-size:2.2rem;
 font-weight:bold;
 }
 
@@ -57,34 +61,6 @@ font-weight:bold;
 display:flex;
 gap:15px;
 flex-wrap:wrap;
-}
-
-.nav-links button{
-background:#3b82f6;
-border:none;
-padding:12px 18px;
-border-radius:14px;
-color:white;
-cursor:pointer;
-font-weight:bold;
-}
-
-.card{
-background:rgba(255,255,255,0.08);
-border:1px solid rgba(255,255,255,0.15);
-backdrop-filter:blur(10px);
-border-radius:25px;
-padding:30px;
-margin-bottom:30px;
-}
-
-input{
-width:100%;
-padding:15px;
-border:none;
-border-radius:15px;
-margin-bottom:20px;
-font-size:1rem;
 }
 
 button{
@@ -101,11 +77,30 @@ button:hover{
 transform:scale(1.05);
 }
 
-.note{
+.card{
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.15);
+backdrop-filter:blur(10px);
+border-radius:25px;
+padding:30px;
+margin-bottom:30px;
+}
+
+input,select{
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+margin-top:15px;
 margin-bottom:20px;
+font-size:1rem;
+}
+
+.note{
+margin:20px 0;
 line-height:1.8;
-color:#93c5fd;
 text-align:center;
+color:#93c5fd;
 }
 
 .palette{
@@ -113,8 +108,7 @@ display:flex;
 justify-content:center;
 gap:15px;
 flex-wrap:wrap;
-margin-top:20px;
-margin-bottom:20px;
+margin:20px 0;
 }
 
 .color{
@@ -138,12 +132,6 @@ justify-content:center;
 margin-top:25px;
 }
 
-.message{
-text-align:center;
-margin-top:20px;
-color:#93c5fd;
-}
-
 .creation-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -157,11 +145,6 @@ padding:20px;
 border-radius:20px;
 text-align:center;
 cursor:pointer;
-transition:0.3s;
-}
-
-.creation-card:hover{
-transform:translateY(-5px);
 }
 
 .creation-card img{
@@ -208,29 +191,6 @@ background:white;
 padding:10px;
 border-radius:15px;
 margin-bottom:20px;
-}
-
-.share-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
-gap:15px;
-margin-top:25px;
-}
-
-.share-btn{
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:8px;
-cursor:pointer;
-}
-
-.share-btn img{
-width:48px;
-height:48px;
-padding:8px;
-background:white;
-border-radius:14px;
 }
 
 #aiButton{
@@ -354,7 +314,7 @@ z-index:9999;
 #scannerVideo{
 width:100%;
 height:100%;
-object-fit:cover;
+object-fit:contain;
 position:absolute;
 top:0;
 left:0;
@@ -369,28 +329,13 @@ border-radius:20px;
 z-index:2;
 }
 
-.handle{
-width:24px;
-height:24px;
-background:#3b82f6;
-border:3px solid white;
-border-radius:50%;
-position:absolute;
+.setting-item{
+margin-top:20px;
 }
-
-.top-left{top:-12px;left:-12px;}
-.top-right{top:-12px;right:-12px;}
-.bottom-left{bottom:-12px;left:-12px;}
-.bottom-right{bottom:-12px;right:-12px;}
 
 @media(max-width:700px){
-
 .navbar{
 flex-direction:column;
-}
-
-.share-grid{
-grid-template-columns:repeat(3,1fr);
 }
 
 #aiChat{
@@ -398,12 +343,9 @@ width:95%;
 right:2.5%;
 height:75vh;
 }
-
 }
-
 </style>
 </head>
-
 <body>
 
 <div class="container">
@@ -422,13 +364,12 @@ height:75vh;
 <div id="homePage">
 
 <div class="card">
-
 <h2>Enter Your Website URL</h2>
 
 <input type="text" id="urlInput" placeholder="https://example.com">
 
 <p class="note">
-*Note: You can choose a colour before generating your QR code.
+*Note: Before generating your QR code, you can select a colour.
 </p>
 
 <div class="palette">
@@ -445,17 +386,9 @@ height:75vh;
 <div id="qrcode"></div>
 
 <div id="afterGenerate" class="hidden">
-
-<p class="message">
-Screenshot your QR code so you can use it anywhere!
-</p>
-
 <input type="text" id="qrName" placeholder="Enter QR Code Name">
-
 <button onclick="saveQR()">Save QR Code</button>
-
 </div>
-
 </div>
 
 <div class="card">
@@ -473,7 +406,7 @@ Screenshot your QR code so you can use it anywhere!
 <p>Yes, it autosaves.</p>
 <br><br>
 <h3>If I switch device will my QR codes stay?</h3>
-<p>No, saved QR codes stay only on that browser.</p>
+<p>No, they stay on the same browser.</p>
 </div>
 </div>
 
@@ -490,7 +423,26 @@ style="border:none;border-radius:20px;">
 <div id="settingsPage" class="hidden">
 <div class="card">
 <h1>Settings</h1>
-<p>Appearance and privacy settings coming soon.</p>
+
+<div class="setting-item">
+<p>Theme Mode</p>
+<select onchange="changeTheme(this.value)">
+<option value="dark">Dark</option>
+<option value="light">Light</option>
+</select>
+</div>
+
+<div class="setting-item">
+<p>Accent Colour</p>
+<select onchange="changeAccent(this.value)">
+<option value="#3b82f6">Blue</option>
+<option value="#22c55e">Green</option>
+<option value="#ef4444">Red</option>
+</select>
+</div>
+
+<button onclick="clearQRData()">Clear Saved QR Codes</button>
+
 </div>
 </div>
 
@@ -508,22 +460,14 @@ style="border:none;border-radius:20px;">
 </div>
 
 <div id="aiChat">
-
-<div id="aiHeader">
-QuickQR Assistant
-</div>
-
+<div id="aiHeader">QuickQR Assistant</div>
 <div id="aiMessages">
-<div class="aiMsg bot">
-Hi! I can help you use QuickQR.
+<div class="aiMsg bot">Hi! I can help you use QuickQR.</div>
 </div>
-</div>
-
 <div id="aiInputArea">
 <input type="text" id="aiInput" placeholder="Ask something...">
 <button id="sendBtn">Send</button>
 </div>
-
 </div>
 
 <button class="scanner-btn" onclick="openScanner()">
@@ -531,20 +475,9 @@ Hi! I can help you use QuickQR.
 </button>
 
 <div id="scannerOverlay">
-
 <video id="scannerVideo" autoplay playsinline></video>
-
-<button onclick="closeScanner()">
-Close
-</button>
-
-<div class="scan-box">
-<div class="handle top-left"></div>
-<div class="handle top-right"></div>
-<div class="handle bottom-left"></div>
-<div class="handle bottom-right"></div>
-</div>
-
+<button onclick="closeScanner()">Close</button>
+<div class="scan-box"></div>
 </div>
 
 <script>
@@ -555,10 +488,16 @@ let currentColor = "black";
 
 function showPage(page){
 
-document.getElementById("homePage").classList.add("hidden");
-document.getElementById("faqPage").classList.add("hidden");
-document.getElementById("tutorialPage").classList.add("hidden");
-document.getElementById("settingsPage").classList.add("hidden");
+const pages = [
+"homePage",
+"faqPage",
+"tutorialPage",
+"settingsPage"
+];
+
+pages.forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
 
 if(page === "home"){
 document.getElementById("homePage").classList.remove("hidden");
@@ -575,7 +514,6 @@ document.getElementById("tutorialPage").classList.remove("hidden");
 if(page === "settings"){
 document.getElementById("settingsPage").classList.remove("hidden");
 }
-
 }
 
 function setQRColor(color){
@@ -594,7 +532,6 @@ return;
 currentURL = url;
 
 const qrContainer = document.getElementById("qrcode");
-
 qrContainer.innerHTML = "";
 
 new QRCode(qrContainer,{
@@ -606,17 +543,13 @@ colorLight:"#ffffff"
 });
 
 setTimeout(()=>{
-
 const canvas = qrContainer.querySelector("canvas");
-
 if(canvas){
 currentQRImage = canvas.toDataURL("image/png");
 }
-
 },500);
 
 document.getElementById("afterGenerate").classList.remove("hidden");
-
 }
 
 function saveQR(){
@@ -628,8 +561,7 @@ alert("Please enter a QR code name!");
 return;
 }
 
-const creations =
-JSON.parse(localStorage.getItem("qrCreations")) || [];
+const creations = JSON.parse(localStorage.getItem("qrCreations")) || [];
 
 creations.push({
 name:name,
@@ -638,31 +570,23 @@ url:currentURL,
 created:new Date().toLocaleString()
 });
 
-localStorage.setItem(
-"qrCreations",
-JSON.stringify(creations)
-);
+localStorage.setItem("qrCreations",JSON.stringify(creations));
 
 loadCreations();
 
 alert("QR Code Saved!");
-
 }
 
 function loadCreations(){
 
-const creationsDiv =
-document.getElementById("creations");
-
+const creationsDiv = document.getElementById("creations");
 creationsDiv.innerHTML = "";
 
-const creations =
-JSON.parse(localStorage.getItem("qrCreations")) || [];
+const creations = JSON.parse(localStorage.getItem("qrCreations")) || [];
 
 creations.forEach(item=>{
 
 const card = document.createElement("div");
-
 card.className = "creation-card";
 
 card.innerHTML = `
@@ -675,14 +599,13 @@ openInfo(item);
 };
 
 creationsDiv.appendChild(card);
-
 });
-
 }
 
 function openInfo(item){
 
-document.getElementById("modal").style.display = "flex";
+const modal = document.getElementById("modal");
+modal.style.display = "flex";
 
 document.getElementById("modalBody").innerHTML = `
 <img src="${item.image}">
@@ -690,92 +613,91 @@ document.getElementById("modalBody").innerHTML = `
 <p><b>URL:</b> ${item.url}</p>
 <p><b>Created:</b> ${item.created}</p>
 `;
-
 }
 
 function closeModal(){
 document.getElementById("modal").style.display = "none";
 }
 
-loadCreations();
+function changeTheme(mode){
 
-const aiButton =
-document.getElementById("aiButton");
-
-const aiChat =
-document.getElementById("aiChat");
-
-aiButton.onclick = ()=>{
-
-if(aiChat.style.display==="flex"){
-aiChat.style.display="none";
+if(mode === "light"){
+document.body.style.background = "linear-gradient(135deg,#e2e8f0,#cbd5e1)";
+document.body.style.color = "black";
 }else{
-aiChat.style.display="flex";
+document.body.style.background = "linear-gradient(135deg,#0f172a,#1e293b)";
+document.body.style.color = "white";
+}
 }
 
+function changeAccent(color){
+document.querySelectorAll("button").forEach(btn=>{
+btn.style.background = color;
+});
+}
+
+function clearQRData(){
+if(confirm("Delete all QR codes?")){
+localStorage.removeItem("qrCreations");
+loadCreations();
+}
+}
+
+loadCreations();
+
+const aiButton = document.getElementById("aiButton");
+const aiChat = document.getElementById("aiChat");
+
+aiButton.onclick = ()=>{
+aiChat.style.display = aiChat.style.display === "flex" ? "none" : "flex";
 };
 
-document.getElementById("sendBtn").onclick = ()=>{
+const sendBtn = document.getElementById("sendBtn");
+const aiInput = document.getElementById("aiInput");
+const aiMessages = document.getElementById("aiMessages");
 
-const input =
-document.getElementById("aiInput");
+sendBtn.onclick = ()=>{
 
-const text = input.value.trim();
+const text = aiInput.value.trim();
+if(text === "") return;
 
-if(text==="") return;
+aiMessages.innerHTML += `<div class="aiMsg user">${text}</div>`;
+aiMessages.innerHTML += `<div class="aiMsg bot">Getting your answer...</div>`;
 
-const messages =
-document.getElementById("aiMessages");
-
-messages.innerHTML += `
-<div class="aiMsg user">${text}</div>
-<div class="aiMsg bot">Getting your answer...</div>
-`;
-
-input.value = "";
-
+aiInput.value = "";
 };
 
 let scannerStream;
 
 async function openScanner(){
 
-document.getElementById("scannerOverlay")
-.style.display = "flex";
+const overlay = document.getElementById("scannerOverlay");
+overlay.style.display = "flex";
 
 try{
 
-scannerStream =
-await navigator.mediaDevices.getUserMedia({
+scannerStream = await navigator.mediaDevices.getDisplayMedia({
 video:true
 });
 
-document.getElementById("scannerVideo")
-.srcObject = scannerStream;
+document.getElementById("scannerVideo").srcObject = scannerStream;
 
 }catch(err){
-
-alert("Camera access denied.");
-
+alert("Screen sharing cancelled.");
 }
-
 }
 
 function closeScanner(){
 
-document.getElementById("scannerOverlay")
-.style.display = "none";
+document.getElementById("scannerOverlay").style.display = "none";
 
 if(scannerStream){
-
-scannerStream.getTracks()
-.forEach(track=>track.stop());
-
+scannerStream.getTracks().forEach(track=>track.stop());
 }
-
 }
 
 </script>
 
 </body>
-</html>
+</htm
+```

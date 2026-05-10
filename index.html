@@ -814,6 +814,294 @@ document.getElementById("modal")
 loadCreations();
 
 </script>
+# Full QuickQR AI Assistant Integration
+
+Paste this ENTIRE section RIGHT BEFORE your closing `</body>` tag inside your existing `index.html`.
+
+```html
+<style>
+
+#aiButton{
+position:fixed;
+bottom:20px;
+right:20px;
+width:70px;
+height:70px;
+border-radius:50%;
+background:#111827;
+border:3px solid #3b82f6;
+cursor:pointer;
+display:flex;
+justify-content:center;
+align-items:center;
+box-shadow:0 0 25px rgba(59,130,246,0.6);
+z-index:9999;
+overflow:hidden;
+}
+
+#aiButton img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+#aiChat{
+position:fixed;
+bottom:110px;
+right:20px;
+width:340px;
+max-width:90%;
+height:500px;
+background:#0f172a;
+border:1px solid rgba(255,255,255,0.15);
+border-radius:25px;
+display:none;
+flex-direction:column;
+overflow:hidden;
+box-shadow:0 0 40px rgba(0,0,0,0.5);
+z-index:9999;
+}
+
+#aiHeader{
+padding:18px;
+background:#111827;
+font-size:1.2rem;
+font-weight:bold;
+text-align:center;
+}
+
+#aiMessages{
+flex:1;
+padding:15px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.aiMsg{
+padding:12px 15px;
+border-radius:18px;
+max-width:85%;
+line-height:1.5;
+font-size:0.95rem;
+}
+
+.user{
+align-self:flex-end;
+background:#3b82f6;
+}
+
+.bot{
+align-self:flex-start;
+background:#1e293b;
+}
+
+#aiInputArea{
+display:flex;
+padding:12px;
+gap:10px;
+background:#111827;
+}
+
+#aiInput{
+flex:1;
+padding:12px;
+border:none;
+border-radius:12px;
+outline:none;
+background:#1e293b;
+color:white;
+}
+
+#sendBtn{
+padding:12px 16px;
+border:none;
+border-radius:12px;
+background:#3b82f6;
+color:white;
+cursor:pointer;
+}
+
+@media(max-width:700px){
+
+#aiChat{
+width:95%;
+right:2.5%;
+height:75vh;
+}
+
+#aiButton{
+width:60px;
+height:60px;
+}
+
+}
+
+</style>
+
+<div id="aiButton">
+<img src="ai.png">
+</div>
+
+<div id="aiChat">
+
+<div id="aiHeader">
+QuickQR Assistant
+</div>
+
+<div id="aiMessages">
+<div class="aiMsg bot">
+Hi! I can help you learn how to use QuickQR.
+</div>
+</div>
+
+<div id="aiInputArea">
+<input type="text" id="aiInput" placeholder="Ask something about QuickQR...">
+<button id="sendBtn">Send</button>
+</div>
+
+</div>
+
+<script>
+
+const aiButton = document.getElementById("aiButton");
+const aiChat = document.getElementById("aiChat");
+const aiMessages = document.getElementById("aiMessages");
+const aiInput = document.getElementById("aiInput");
+const sendBtn = document.getElementById("sendBtn");
+
+aiButton.onclick = () => {
+
+if(aiChat.style.display === "flex"){
+aiChat.style.display = "none";
+}else{
+aiChat.style.display = "flex";
+}
+
+};
+
+function addMessage(text,type){
+
+const div = document.createElement("div");
+
+div.className = `aiMsg ${type}`;
+
+div.innerText = text;
+
+aiMessages.appendChild(div);
+
+aiMessages.scrollTop = aiMessages.scrollHeight;
+
+return div;
+
+}
+
+function generateQuickQRAnswer(question){
+
+question = question.toLowerCase();
+
+const quickqrKnowledge = [
+"qr",
+"quickqr",
+"save",
+"generate",
+"download",
+"share",
+"tutorial",
+"faq",
+"colour",
+"palette",
+"navbar",
+"creation",
+"url",
+"favicon",
+"linkedin",
+"facebook",
+"youtube",
+"instagram",
+"whatsapp"
+];
+
+const related = quickqrKnowledge.some(word => question.includes(word));
+
+if(!related){
+return "Sorry! But I can't help you with unrelated questions.";
+}
+
+if(question.includes("share")){
+return "To share your QR code, open My Creations, click your QR code, and use the social buttons or download button.";
+}
+
+if(question.includes("save")){
+return "Your QR codes autosave inside your browser using local storage.";
+}
+
+if(question.includes("generate")){
+return "Paste a website URL, optionally choose a colour, and press Generate QR Code.";
+}
+
+if(question.includes("colour") || question.includes("palette")){
+return "You can click any colour circle before generating your QR code to customise its appearance.";
+}
+
+if(question.includes("tutorial")){
+return "Open the Tutorial page from the navbar to watch the QuickQR tutorial video.";
+}
+
+if(question.includes("faq")){
+return "The FAQ page contains common QuickQR questions and answers.";
+}
+
+if(question.includes("download")){
+return "Open your QR code info and press the Download button to save the QR image.";
+}
+
+if(question.includes("favicon")){
+return "QuickQR automatically tries to place the website favicon inside the QR code.";
+}
+
+if(question.includes("creation")){
+return "Your saved QR codes appear in the My Creations section.";
+}
+
+return "I learned that this question is related to QuickQR. Try asking more specifically about QR generation, saving, downloading, sharing, or colours.";
+
+}
+
+function handleAI(){
+
+const text = aiInput.value.trim();
+
+if(text === "") return;
+
+addMessage(text,"user");
+
+aiInput.value = "";
+
+const thinking = addMessage("Getting your answer...","bot");
+
+setTimeout(() => {
+
+thinking.remove();
+
+const answer = generateQuickQRAnswer(text);
+
+addMessage(answer,"bot");
+
+},1500);
+
+}
+
+sendBtn.onclick = handleAI;
+
+aiInput.addEventListener("keypress",(e)=>{
+if(e.key === "Enter"){
+handleAI();
+}
+});
+
+</script>
 
 </body>
-</html>
+</html> 

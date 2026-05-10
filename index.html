@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>QuickQR</title>
 
 <link rel="icon" type="image/png" href="favicon.png">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 
 <style>
 
@@ -23,36 +20,39 @@ font-family:Arial,sans-serif;
 
 body{
 background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
 min-height:100vh;
 padding:20px;
-color:white;
+overflow-x:hidden;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
 }
 
 .hidden{
 display:none !important;
 }
 
-.container{
-max-width:1100px;
-margin:auto;
-}
+/* NAVBAR */
 
 .navbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:20px;
-border-radius:25px;
 background:rgba(255,255,255,0.08);
 border:1px solid rgba(255,255,255,0.15);
 backdrop-filter:blur(10px);
+border-radius:25px;
 margin-bottom:30px;
 flex-wrap:wrap;
 gap:20px;
 }
 
 .logo{
-font-size:2.3rem;
+font-size:2.5rem;
 font-weight:bold;
 }
 
@@ -62,19 +62,17 @@ gap:15px;
 flex-wrap:wrap;
 }
 
-button{
+.nav-links button{
 background:#3b82f6;
-color:white;
 border:none;
-padding:14px 22px;
-border-radius:15px;
+padding:12px 18px;
+border-radius:14px;
+color:white;
+font-weight:bold;
 cursor:pointer;
-transition:0.3s;
 }
 
-button:hover{
-transform:scale(1.05);
-}
+/* CARD */
 
 .card{
 background:rgba(255,255,255,0.08);
@@ -85,7 +83,9 @@ padding:30px;
 margin-bottom:30px;
 }
 
-input,select{
+/* INPUTS */
+
+input{
 width:100%;
 padding:15px;
 border:none;
@@ -93,14 +93,40 @@ border-radius:15px;
 margin-top:15px;
 margin-bottom:20px;
 font-size:1rem;
+outline:none;
 }
+
+button{
+background:#3b82f6;
+color:white;
+border:none;
+padding:14px 22px;
+border-radius:15px;
+cursor:pointer;
+transition:0.3s;
+font-size:1rem;
+}
+
+button:hover{
+transform:scale(1.03);
+}
+
+.note{
+text-align:center;
+margin-top:20px;
+margin-bottom:20px;
+line-height:1.8;
+color:#93c5fd;
+}
+
+/* PALETTE */
 
 .palette{
 display:flex;
 justify-content:center;
 gap:15px;
 flex-wrap:wrap;
-margin:20px 0;
+margin-bottom:20px;
 }
 
 .color{
@@ -118,11 +144,21 @@ cursor:pointer;
 .blue{background:blue;}
 .black{background:black;}
 
+/* QR */
+
 #qrcode{
 display:flex;
 justify-content:center;
-margin-top:25px;
+margin-top:30px;
 }
+
+.message{
+text-align:center;
+margin-top:20px;
+color:#93c5fd;
+}
+
+/* CREATIONS */
 
 .creation-grid{
 display:grid;
@@ -137,6 +173,11 @@ padding:20px;
 border-radius:20px;
 text-align:center;
 cursor:pointer;
+transition:0.3s;
+}
+
+.creation-card:hover{
+transform:translateY(-5px);
 }
 
 .creation-card img{
@@ -148,30 +189,31 @@ border-radius:12px;
 
 .creation-name{
 margin-top:15px;
-font-size:1.2rem;
+font-size:1.1rem;
 font-weight:bold;
 }
 
+/* MODAL */
+
 .modal{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+inset:0;
 background:rgba(0,0,0,0.7);
 display:none;
 justify-content:center;
 align-items:center;
 padding:20px;
-z-index:999;
+z-index:9999;
 }
 
 .modal-content{
 background:#1e293b;
 padding:30px;
 border-radius:25px;
-max-width:700px;
 width:100%;
+max-width:700px;
+max-height:90vh;
+overflow:auto;
 text-align:center;
 }
 
@@ -183,14 +225,77 @@ border-radius:15px;
 margin-bottom:20px;
 }
 
-.setting-item{
-margin-top:20px;
+.share-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
+gap:15px;
+margin-top:25px;
 }
+
+.share-btn{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:8px;
+cursor:pointer;
+}
+
+.share-btn img{
+width:48px;
+height:48px;
+background:white;
+padding:8px;
+border-radius:14px;
+}
+
+.share-btn span{
+font-size:0.8rem;
+font-weight:bold;
+}
+
+.close-btn{
+margin-top:25px;
+}
+
+/* SETTINGS */
+
+.setting-group{
+margin-top:30px;
+}
+
+.setting-title{
+font-size:1.3rem;
+margin-bottom:15px;
+color:#93c5fd;
+}
+
+.setting-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(255,255,255,0.06);
+padding:15px;
+border-radius:15px;
+margin-bottom:15px;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.setting-item select,
+.setting-item input{
+width:auto;
+padding:10px;
+margin:0;
+border-radius:10px;
+border:none;
+}
+
+/* AI */
 
 #aiButton{
 position:fixed;
-bottom:20px;
 right:20px;
+bottom:20px;
 width:70px;
 height:70px;
 border-radius:50%;
@@ -199,9 +304,10 @@ border:3px solid #3b82f6;
 display:flex;
 justify-content:center;
 align-items:center;
-overflow:hidden;
 cursor:pointer;
 z-index:9999;
+overflow:hidden;
+box-shadow:0 0 20px rgba(59,130,246,0.7);
 }
 
 #aiButton img{
@@ -212,15 +318,15 @@ object-fit:cover;
 
 #aiChat{
 position:fixed;
-bottom:110px;
 right:20px;
+bottom:110px;
 width:340px;
 height:500px;
 background:#0f172a;
 border-radius:25px;
+overflow:hidden;
 display:none;
 flex-direction:column;
-overflow:hidden;
 z-index:9999;
 border:1px solid rgba(255,255,255,0.15);
 }
@@ -234,8 +340,8 @@ text-align:center;
 
 #aiMessages{
 flex:1;
-padding:15px;
 overflow-y:auto;
+padding:15px;
 display:flex;
 flex-direction:column;
 gap:12px;
@@ -267,12 +373,16 @@ background:#111827;
 
 #aiInput{
 flex:1;
-padding:12px;
-border:none;
-border-radius:12px;
+margin:0;
 background:#1e293b;
 color:white;
 }
+
+#sendBtn{
+padding:12px 16px;
+}
+
+/* SCANNER */
 
 .scanner-btn{
 position:fixed;
@@ -282,22 +392,123 @@ width:65px;
 height:65px;
 border-radius:50%;
 background:#3b82f6;
-border:none;
 display:flex;
 justify-content:center;
 align-items:center;
+cursor:pointer;
+z-index:9999;
 overflow:hidden;
-z-index:999;
 }
 
 .scanner-btn img{
-width:35px;
+width:36px;
 }
+
+#scannerOverlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.9);
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:99999;
+}
+
+#scannerVideo{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.scan-box{
+position:relative;
+width:260px;
+height:260px;
+border:3px solid #3b82f6;
+border-radius:20px;
+z-index:2;
+}
+
+.handle{
+width:24px;
+height:24px;
+background:#3b82f6;
+border:3px solid white;
+border-radius:50%;
+position:absolute;
+}
+
+.top-left{
+top:-12px;
+left:-12px;
+cursor:nwse-resize;
+}
+
+.top-right{
+top:-12px;
+right:-12px;
+cursor:nesw-resize;
+}
+
+.bottom-left{
+bottom:-12px;
+left:-12px;
+cursor:nesw-resize;
+}
+
+.bottom-right{
+bottom:-12px;
+right:-12px;
+cursor:nwse-resize;
+}
+
+.scan-line{
+position:absolute;
+left:0;
+width:100%;
+height:4px;
+background:#3b82f6;
+animation:scanMove 2s linear infinite;
+}
+
+@keyframes scanMove{
+0%{top:0;}
+100%{top:calc(100% - 4px);}
+}
+
+#closeScanner{
+position:absolute;
+top:20px;
+right:20px;
+background:red;
+z-index:5;
+}
+
+/* MOBILE */
 
 @media(max-width:700px){
 
+body{
+padding:12px;
+}
+
 .navbar{
 flex-direction:column;
+}
+
+.creation-card img{
+width:110px;
+}
+
+.share-grid{
+grid-template-columns:repeat(3,1fr);
+}
+
+.share-btn img{
+width:42px;
+height:42px;
 }
 
 #aiChat{
@@ -306,18 +517,32 @@ right:2.5%;
 height:75vh;
 }
 
-.creation-card img{
-width:110px;
+#aiButton{
+width:60px;
+height:60px;
+}
+
+.scanner-btn{
+width:55px;
+height:55px;
+right:15px;
+bottom:90px;
+}
+
+.scan-box{
+width:220px;
+height:220px;
 }
 
 }
 
 </style>
 </head>
-
 <body>
 
 <div class="container">
+
+<!-- NAVBAR -->
 
 <div class="navbar">
 
@@ -332,6 +557,8 @@ width:110px;
 
 </div>
 
+<!-- HOME -->
+
 <div id="homePage">
 
 <div class="card">
@@ -339,6 +566,10 @@ width:110px;
 <h2>Enter Your Website URL</h2>
 
 <input type="text" id="urlInput" placeholder="https://example.com">
+
+<p class="note">
+*Note: Before generating your QR code, if you wish, you can select a colour and then generate.
+</p>
 
 <div class="palette">
 <div class="color red" onclick="setQRColor('red')"></div>
@@ -354,6 +585,10 @@ width:110px;
 <div id="qrcode"></div>
 
 <div id="afterGenerate" class="hidden">
+
+<p class="message">
+Screenshot your QR code so you can use it anywhere!
+</p>
 
 <input type="text" id="qrName" placeholder="Enter QR Code Name">
 
@@ -373,6 +608,8 @@ width:110px;
 
 </div>
 
+<!-- FAQ -->
+
 <div id="faqPage" class="hidden">
 
 <div class="card">
@@ -381,17 +618,19 @@ width:110px;
 
 <br>
 
-<h3>Do QR codes autosave?</h3>
-<p>Yes.</p>
+<h3>Does my QR codes save?</h3>
+<p>Yes, they autosave in your browser.</p>
 
 <br><br>
 
-<h3>Do they sync between devices?</h3>
-<p>No.</p>
+<h3>Do I need an account?</h3>
+<p>No. Everything is free.</p>
 
 </div>
 
 </div>
+
+<!-- TUTORIAL -->
 
 <div id="tutorialPage" class="hidden">
 
@@ -399,10 +638,8 @@ width:110px;
 
 <h1>Tutorial</h1>
 
-<iframe
-width="100%"
-height="500"
-src="https://www.youtube.com/embed/SueuEgfWI4A"A
+<iframe width="100%" height="500"
+src="https://www.youtube.com/embed/C_dpYF1-GjU"
 style="border:none;border-radius:20px;">
 </iframe>
 
@@ -410,15 +647,22 @@ style="border:none;border-radius:20px;">
 
 </div>
 
+<!-- SETTINGS -->
+
 <div id="settingsPage" class="hidden">
 
 <div class="card">
 
 <h1>Settings</h1>
 
-<div class="setting-item">
+<div class="setting-group">
 
-<p>Theme</p>
+<div class="setting-title">
+Appearance Settings
+</div>
+
+<div class="setting-item">
+<span>Theme</span>
 
 <select onchange="changeTheme(this.value)">
 <option value="dark">Dark</option>
@@ -428,23 +672,38 @@ style="border:none;border-radius:20px;">
 </div>
 
 <div class="setting-item">
-
-<p>Accent Colour</p>
+<span>Accent Colour</span>
 
 <select onchange="changeAccent(this.value)">
 <option value="#3b82f6">Blue</option>
 <option value="#22c55e">Green</option>
 <option value="#ef4444">Red</option>
+<option value="#a855f7">Purple</option>
 </select>
 
 </div>
 
+</div>
+
+<div class="setting-group">
+
+<div class="setting-title">
+Privacy Settings
+</div>
+
 <div class="setting-item">
+<span>Export QR Data</span>
+<button onclick="exportQRData()">Export</button>
+</div>
 
-<button onclick="clearQRData()">
-Clear Saved QR Codes
-</button>
+<div class="setting-item">
+<span>Import QR Data</span>
+<input type="file" onchange="importQRData(event)">
+</div>
 
+<div class="setting-item">
+<span>Clear QR Codes</span>
+<button onclick="clearQRData()">Clear</button>
 </div>
 
 </div>
@@ -452,6 +711,10 @@ Clear Saved QR Codes
 </div>
 
 </div>
+
+</div>
+
+<!-- MODAL -->
 
 <div id="modal" class="modal">
 
@@ -459,11 +722,15 @@ Clear Saved QR Codes
 
 <div id="modalBody"></div>
 
-<button onclick="closeModal()">Close</button>
+<button class="close-btn" onclick="closeModal()">
+Close
+</button>
 
 </div>
 
 </div>
+
+<!-- AI -->
 
 <div id="aiButton">
 <img src="ai.png">
@@ -476,9 +743,11 @@ QuickQR Assistant
 </div>
 
 <div id="aiMessages">
+
 <div class="aiMsg bot">
 Hi! I can help you use QuickQR.
 </div>
+
 </div>
 
 <div id="aiInputArea">
@@ -488,46 +757,67 @@ Hi! I can help you use QuickQR.
 
 </div>
 
+<!-- SCANNER -->
+
 <button class="scanner-btn" onclick="openScanner()">
 <img src="scanner.png">
 </button>
 
+<div id="scannerOverlay">
+
+<video id="scannerVideo" autoplay playsinline></video>
+
+<button id="closeScanner" onclick="closeScanner()">
+Close
+</button>
+
+<div class="scan-box" id="scanBox">
+
+<div class="scan-line"></div>
+
+<div class="handle top-left"></div>
+<div class="handle top-right"></div>
+<div class="handle bottom-left"></div>
+<div class="handle bottom-right"></div>
+
+</div>
+
+</div>
+
 <script>
 
+let currentColor = "black";
 let currentQRImage = "";
 let currentURL = "";
-let currentColor = "black";
+
+/* PAGE */
 
 function showPage(page){
 
-const pages = [
-"homePage",
-"faqPage",
-"tutorialPage",
-"settingsPage"
-];
+document.getElementById("homePage").classList.add("hidden");
+document.getElementById("faqPage").classList.add("hidden");
+document.getElementById("tutorialPage").classList.add("hidden");
+document.getElementById("settingsPage").classList.add("hidden");
 
-pages.forEach(id=>{
-document.getElementById(id).classList.add("hidden");
-});
-
-if(page==="home"){
+if(page === "home"){
 document.getElementById("homePage").classList.remove("hidden");
 }
 
-if(page==="faq"){
+if(page === "faq"){
 document.getElementById("faqPage").classList.remove("hidden");
 }
 
-if(page==="tutorial"){
+if(page === "tutorial"){
 document.getElementById("tutorialPage").classList.remove("hidden");
 }
 
-if(page==="settings"){
+if(page === "settings"){
 document.getElementById("settingsPage").classList.remove("hidden");
 }
 
 }
+
+/* QR */
 
 function setQRColor(color){
 currentColor = color;
@@ -537,7 +827,7 @@ function generateQR(){
 
 const url = document.getElementById("urlInput").value;
 
-if(url.trim()===""){
+if(url.trim() === ""){
 alert("Please enter a URL!");
 return;
 }
@@ -556,26 +846,26 @@ colorDark:currentColor,
 colorLight:"#ffffff"
 });
 
-setTimeout(()=>{
+setTimeout(() => {
 
 const canvas = qrContainer.querySelector("canvas");
 
-if(canvas){
 currentQRImage = canvas.toDataURL("image/png");
-}
-
-},500);
 
 document.getElementById("afterGenerate")
 .classList.remove("hidden");
 
+},500);
+
 }
+
+/* SAVE */
 
 function saveQR(){
 
 const name = document.getElementById("qrName").value;
 
-if(name.trim()===""){
+if(name.trim() === ""){
 alert("Please enter a QR code name!");
 return;
 }
@@ -587,6 +877,7 @@ creations.push({
 name:name,
 image:currentQRImage,
 url:currentURL,
+color:currentColor,
 created:new Date().toLocaleString()
 });
 
@@ -601,6 +892,8 @@ alert("QR Code Saved!");
 
 }
 
+/* LOAD */
+
 function loadCreations(){
 
 const creationsDiv =
@@ -611,7 +904,7 @@ creationsDiv.innerHTML = "";
 const creations =
 JSON.parse(localStorage.getItem("qrCreations")) || [];
 
-creations.forEach(item=>{
+creations.forEach(item => {
 
 const card = document.createElement("div");
 
@@ -622,9 +915,7 @@ card.innerHTML = `
 <div class="creation-name">${item.name}</div>
 `;
 
-card.onclick = ()=>{
-openInfo(item);
-};
+card.onclick = () => openInfo(item);
 
 creationsDiv.appendChild(card);
 
@@ -632,31 +923,154 @@ creationsDiv.appendChild(card);
 
 }
 
+/* INFO */
+
 function openInfo(item){
 
-document.getElementById("modal")
-.style.display = "flex";
+document.getElementById("modal").style.display = "flex";
 
-document.getElementById("modalBody")
-.innerHTML = `
+document.getElementById("modalBody").innerHTML = `
+
 <img src="${item.image}">
+
 <h2>${item.name}</h2>
-<p><b>URL:</b> ${item.url}</p>
-<p><b>Created:</b> ${item.created}</p>
+
+<p style="margin-top:15px;">
+<b>URL:</b> ${item.url}
+</p>
+
+<p style="margin-top:15px;">
+<b>Created:</b> ${item.created}
+</p>
+
+<div class="share-grid">
+
+<div class="share-btn"
+onclick='sharePlatform("whatsapp",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+<span>WhatsApp</span>
+</div>
+
+<div class="share-btn"
+onclick='sharePlatform("linkedin",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/174/174857.png">
+<span>LinkedIn</span>
+</div>
+
+<div class="share-btn"
+onclick='sharePlatform("facebook",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
+<span>Facebook</span>
+</div>
+
+<div class="share-btn"
+onclick='sharePlatform("instagram",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+<span>Instagram</span>
+</div>
+
+<div class="share-btn"
+onclick='sharePlatform("youtube",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+<span>YouTube</span>
+</div>
+
+<div class="share-btn"
+onclick='sharePlatform("download",${JSON.stringify(item)})'>
+<img src="https://cdn-icons-png.flaticon.com/512/724/724933.png">
+<span>Download</span>
+</div>
+
+</div>
+
 `;
 
 }
 
 function closeModal(){
+document.getElementById("modal").style.display = "none";
+}
 
-document.getElementById("modal")
-.style.display = "none";
+/* SHARE */
+
+async function sharePlatform(platform,item){
+
+const text =
+`Check out my QR Code!\n${item.url}\nhttps://quickqr-website.vercel.app`;
+
+if(platform === "whatsapp"){
+window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+}
+
+if(platform === "linkedin"){
+window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(item.url)}`);
+}
+
+if(platform === "facebook"){
+window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(item.url)}`);
+}
+
+if(platform === "instagram"){
+alert("Download the image and upload it to Instagram.");
+}
+
+if(platform === "youtube"){
+alert("Download the image and upload it as a YouTube post.");
+}
+
+if(platform === "download"){
+
+const canvas = document.createElement("canvas");
+
+canvas.width = 800;
+canvas.height = 1000;
+
+const ctx = canvas.getContext("2d");
+
+const gradient = ctx.createLinearGradient(0,0,800,1000);
+
+gradient.addColorStop(0,item.color);
+gradient.addColorStop(1,"black");
+
+ctx.fillStyle = gradient;
+ctx.fillRect(0,0,800,1000);
+
+ctx.fillStyle = "white";
+ctx.textAlign = "center";
+
+ctx.font = "bold 45px Arial";
+ctx.fillText(item.name,400,100);
+
+ctx.font = "28px Arial";
+ctx.fillText(item.url,400,160);
+
+const qr = new Image();
+
+qr.src = item.image;
+
+qr.onload = () => {
+
+ctx.drawImage(qr,220,260,360,360);
+
+const a = document.createElement("a");
+
+a.href = canvas.toDataURL("image/png");
+
+a.download = item.name + ".png";
+
+a.click();
+
+};
 
 }
 
+}
+
+/* SETTINGS */
+
 function changeTheme(mode){
 
-if(mode==="light"){
+if(mode === "light"){
 
 document.body.style.background =
 "linear-gradient(135deg,#e2e8f0,#cbd5e1)";
@@ -676,7 +1090,7 @@ document.body.style.color = "white";
 
 function changeAccent(color){
 
-document.querySelectorAll("button").forEach(btn=>{
+document.querySelectorAll("button").forEach(btn => {
 btn.style.background = color;
 });
 
@@ -694,114 +1108,245 @@ loadCreations();
 
 }
 
-loadCreations();
+function exportQRData(){
 
-const aiButton =
-document.getElementById("aiButton");
+const data =
+localStorage.getItem("qrCreations");
 
-const aiChat =
-document.getElementById("aiChat");
+const blob = new Blob([data],{
+type:"application/json"
+});
 
-aiButton.onclick = ()=>{
+const a = document.createElement("a");
 
-if(aiChat.style.display==="flex"){
-aiChat.style.display="none";
-}else{
-aiChat.style.display="flex";
+a.href = URL.createObjectURL(blob);
+
+a.download = "quickqr-data.json";
+
+a.click();
+
 }
 
-};
+function importQRData(event){
 
-const sendBtn =
-document.getElementById("sendBtn");
-
-const aiInput =
-document.getElementById("aiInput");
-
-const aiMessages =
-document.getElementById("aiMessages");
-
-sendBtn.onclick = ()=>{
-
-const text = aiInput.value.trim();
-
-if(text==="") return;
-
-aiMessages.innerHTML += `
-<div class="aiMsg user">${text}</div>
-`;
-
-aiMessages.innerHTML += `
-<div class="aiMsg bot">
-Getting your answer...
-</div>
-`;
-
-aiInput.value = "";
-
-};
-
-/* QR SCANNER */
-
-function openScanner(){
-
-const input = document.createElement("input");
-
-input.type = "file";
-
-input.accept = "image/*";
-
-input.onchange = (e)=>{
-
-const file = e.target.files[0];
+const file = event.target.files[0];
 
 if(!file) return;
 
-const img = new Image();
+const reader = new FileReader();
 
-img.src = URL.createObjectURL(file);
+reader.onload = function(e){
 
-img.onload = ()=>{
-
-const canvas = document.createElement("canvas");
-
-const ctx = canvas.getContext("2d");
-
-canvas.width = img.width;
-canvas.height = img.height;
-
-ctx.drawImage(img,0,0);
-
-const imageData = ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
+localStorage.setItem(
+"qrCreations",
+e.target.result
 );
 
-const code = jsQR(
-imageData.data,
-canvas.width,
-canvas.height
-);
+loadCreations();
 
-if(code){
+};
 
-window.open(code.data,"_blank");
+reader.readAsText(file);
 
+}
+
+/* AI */
+
+const aiButton = document.getElementById("aiButton");
+const aiChat = document.getElementById("aiChat");
+const aiMessages = document.getElementById("aiMessages");
+const aiInput = document.getElementById("aiInput");
+
+aiButton.onclick = () => {
+
+if(aiChat.style.display === "flex"){
+aiChat.style.display = "none";
 }else{
-
-alert("No QR code found.");
-
+aiChat.style.display = "flex";
 }
 
 };
 
-};
+function addMessage(text,type){
 
-input.click();
+const div = document.createElement("div");
+
+div.className = `aiMsg ${type}`;
+
+div.innerText = text;
+
+aiMessages.appendChild(div);
+
+aiMessages.scrollTop = aiMessages.scrollHeight;
+
+return div;
 
 }
+
+function generateQuickQRAnswer(question){
+
+question = question.toLowerCase();
+
+if(question.includes("generate")){
+return "Paste a URL and press Generate QR Code.";
+}
+
+if(question.includes("save")){
+return "Press Save QR Code after generating.";
+}
+
+if(question.includes("share")){
+return "Open a QR code from My Creations to share it.";
+}
+
+if(question.includes("download")){
+return "Use the Download button inside QR info.";
+}
+
+if(question.includes("scanner")){
+return "Press the scanner button above the AI assistant.";
+}
+
+if(question.includes("settings")){
+return "Open Settings from the navbar.";
+}
+
+if(question.includes("colour")){
+return "Choose a colour circle before generating.";
+}
+
+return "Sorry! But I can't help you with unrelated questions.";
+
+}
+
+function handleAI(){
+
+const text = aiInput.value.trim();
+
+if(text === "") return;
+
+addMessage(text,"user");
+
+aiInput.value = "";
+
+const thinking =
+addMessage("Getting your answer...","bot");
+
+setTimeout(() => {
+
+thinking.remove();
+
+const answer =
+generateQuickQRAnswer(text);
+
+addMessage(answer,"bot");
+
+},1200);
+
+}
+
+document.getElementById("sendBtn")
+.onclick = handleAI;
+
+aiInput.addEventListener("keypress",(e)=>{
+if(e.key === "Enter"){
+handleAI();
+}
+});
+
+/* SCANNER */
+
+let scannerStream;
+
+async function openScanner(){
+
+document.getElementById("scannerOverlay")
+.style.display = "flex";
+
+try{
+
+scannerStream =
+await navigator.mediaDevices.getUserMedia({
+video:{facingMode:"environment"}
+});
+
+document.getElementById("scannerVideo")
+.srcObject = scannerStream;
+
+}catch{
+
+alert("Camera access denied.");
+
+}
+
+}
+
+function closeScanner(){
+
+document.getElementById("scannerOverlay")
+.style.display = "none";
+
+if(scannerStream){
+
+scannerStream.getTracks()
+.forEach(track => track.stop());
+
+}
+
+}
+
+/* DRAG */
+
+const scanBox = document.getElementById("scanBox");
+
+let isDragging = false;
+let currentHandle = null;
+
+document.querySelectorAll(".handle")
+.forEach(handle => {
+
+handle.addEventListener("mousedown",(e)=>{
+
+isDragging = true;
+currentHandle = handle;
+
+e.preventDefault();
+
+});
+
+});
+
+document.addEventListener("mousemove",(e)=>{
+
+if(!isDragging) return;
+
+const rect = scanBox.getBoundingClientRect();
+
+let width = rect.width;
+let height = rect.height;
+
+if(currentHandle.classList.contains("bottom-right")){
+width = e.clientX - rect.left;
+height = e.clientY - rect.top;
+}
+
+width = Math.max(width,150);
+height = Math.max(height,150);
+
+scanBox.style.width = width + "px";
+scanBox.style.height = height + "px";
+
+});
+
+document.addEventListener("mouseup",()=>{
+
+isDragging = false;
+
+});
+
+/* START */
+
+loadCreations();
 
 </script>
 

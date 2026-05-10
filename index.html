@@ -30,6 +30,10 @@ max-width:1100px;
 margin:auto;
 }
 
+.hidden{
+display:none !important;
+}
+
 .navbar{
 display:flex;
 justify-content:space-between;
@@ -74,8 +78,159 @@ padding:30px;
 margin-bottom:30px;
 }
 
-.hidden{
-display:none !important;
+input{
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+margin-bottom:20px;
+font-size:1rem;
+}
+
+button{
+background:#3b82f6;
+color:white;
+border:none;
+padding:14px 22px;
+border-radius:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.note{
+margin-bottom:20px;
+line-height:1.8;
+color:#93c5fd;
+text-align:center;
+}
+
+.palette{
+display:flex;
+justify-content:center;
+gap:15px;
+flex-wrap:wrap;
+margin-top:20px;
+margin-bottom:20px;
+}
+
+.color{
+width:40px;
+height:40px;
+border-radius:50%;
+border:3px solid white;
+cursor:pointer;
+}
+
+.red{background:red;}
+.orange{background:orange;}
+.yellow{background:yellow;}
+.green{background:green;}
+.blue{background:blue;}
+.black{background:black;}
+
+#qrcode{
+display:flex;
+justify-content:center;
+margin-top:25px;
+}
+
+.message{
+text-align:center;
+margin-top:20px;
+color:#93c5fd;
+}
+
+.creation-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.creation-card{
+background:rgba(255,255,255,0.08);
+padding:20px;
+border-radius:20px;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+}
+
+.creation-card:hover{
+transform:translateY(-5px);
+}
+
+.creation-card img{
+width:150px;
+background:white;
+padding:10px;
+border-radius:12px;
+}
+
+.creation-name{
+margin-top:15px;
+font-size:1.2rem;
+font-weight:bold;
+}
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+justify-content:center;
+align-items:center;
+padding:20px;
+z-index:999;
+}
+
+.modal-content{
+background:#1e293b;
+padding:30px;
+border-radius:25px;
+max-width:700px;
+width:100%;
+max-height:90vh;
+overflow:auto;
+text-align:center;
+}
+
+.modal-content img{
+width:220px;
+background:white;
+padding:10px;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+.share-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+gap:15px;
+margin-top:25px;
+}
+
+.share-btn{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:8px;
+cursor:pointer;
+}
+
+.share-btn img{
+width:48px;
+height:48px;
+padding:8px;
+background:white;
+border-radius:14px;
 }
 
 #aiButton{
@@ -87,11 +242,11 @@ height:70px;
 border-radius:50%;
 background:#111827;
 border:3px solid #3b82f6;
-cursor:pointer;
 display:flex;
 justify-content:center;
 align-items:center;
 overflow:hidden;
+cursor:pointer;
 z-index:9999;
 }
 
@@ -106,7 +261,6 @@ position:fixed;
 bottom:110px;
 right:20px;
 width:340px;
-max-width:90%;
 height:500px;
 background:#0f172a;
 border-radius:25px;
@@ -120,7 +274,6 @@ border:1px solid rgba(255,255,255,0.15);
 #aiHeader{
 padding:18px;
 background:#111827;
-font-size:1.2rem;
 font-weight:bold;
 text-align:center;
 }
@@ -139,7 +292,6 @@ padding:12px 15px;
 border-radius:18px;
 max-width:85%;
 line-height:1.5;
-font-size:0.95rem;
 }
 
 .user{
@@ -164,18 +316,8 @@ flex:1;
 padding:12px;
 border:none;
 border-radius:12px;
-outline:none;
 background:#1e293b;
 color:white;
-}
-
-#sendBtn{
-padding:12px 16px;
-border:none;
-border-radius:12px;
-background:#3b82f6;
-color:white;
-cursor:pointer;
 }
 
 .scanner-btn{
@@ -187,12 +329,11 @@ height:65px;
 border-radius:50%;
 background:#3b82f6;
 border:none;
-cursor:pointer;
-z-index:999;
 display:flex;
 justify-content:center;
 align-items:center;
 overflow:hidden;
+z-index:999;
 }
 
 .scanner-btn img{
@@ -203,11 +344,11 @@ width:35px;
 position:fixed;
 inset:0;
 background:rgba(0,0,0,0.85);
-z-index:9999;
 display:none;
 justify-content:center;
 align-items:center;
 flex-direction:column;
+z-index:9999;
 }
 
 #scannerVideo{
@@ -242,48 +383,22 @@ position:absolute;
 .bottom-left{bottom:-12px;left:-12px;}
 .bottom-right{bottom:-12px;right:-12px;}
 
-.scan-line{
-position:absolute;
-left:0;
-width:100%;
-height:4px;
-background:#3b82f6;
-animation:scanMove 2s linear infinite;
+@media(max-width:700px){
+
+.navbar{
+flex-direction:column;
 }
 
-@keyframes scanMove{
-0%{top:0;}
-100%{top:calc(100% - 4px);}
+.share-grid{
+grid-template-columns:repeat(3,1fr);
 }
 
-#closeScanner{
-position:absolute;
-top:20px;
-right:20px;
-z-index:5;
-background:red;
+#aiChat{
+width:95%;
+right:2.5%;
+height:75vh;
 }
 
-.setting-group{
-margin-top:30px;
-}
-
-.setting-title{
-font-size:1.3rem;
-margin-bottom:15px;
-color:#93c5fd;
-}
-
-.setting-item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:rgba(255,255,255,0.06);
-padding:15px;
-border-radius:15px;
-margin-bottom:15px;
-gap:15px;
-flex-wrap:wrap;
 }
 
 </style>
@@ -294,7 +409,6 @@ flex-wrap:wrap;
 <div class="container">
 
 <div class="navbar">
-
 <div class="logo">QuickQR</div>
 
 <div class="nav-links">
@@ -303,81 +417,90 @@ flex-wrap:wrap;
 <button onclick="showPage('tutorial')">Tutorial</button>
 <button onclick="showPage('settings')">Settings</button>
 </div>
-
 </div>
 
 <div id="homePage">
 
 <div class="card">
-<h1>Welcome to QuickQR</h1>
-<p>Create and save QR codes easily.</p>
+
+<h2>Enter Your Website URL</h2>
+
+<input type="text" id="urlInput" placeholder="https://example.com">
+
+<p class="note">
+*Note: You can choose a colour before generating your QR code.
+</p>
+
+<div class="palette">
+<div class="color red" onclick="setQRColor('red')"></div>
+<div class="color orange" onclick="setQRColor('orange')"></div>
+<div class="color yellow" onclick="setQRColor('yellow')"></div>
+<div class="color green" onclick="setQRColor('green')"></div>
+<div class="color blue" onclick="setQRColor('blue')"></div>
+<div class="color black" onclick="setQRColor('black')"></div>
+</div>
+
+<button onclick="generateQR()">Generate QR Code</button>
+
+<div id="qrcode"></div>
+
+<div id="afterGenerate" class="hidden">
+
+<p class="message">
+Screenshot your QR code so you can use it anywhere!
+</p>
+
+<input type="text" id="qrName" placeholder="Enter QR Code Name">
+
+<button onclick="saveQR()">Save QR Code</button>
+
+</div>
+
+</div>
+
+<div class="card">
+<h2>My Creations</h2>
+<div id="creations" class="creation-grid"></div>
 </div>
 
 </div>
 
 <div id="faqPage" class="hidden">
-
 <div class="card">
 <h1>FAQ</h1>
-<p>QuickQR saves QR codes locally in your browser.</p>
+<br>
+<h3>Does my qr codes save?</h3>
+<p>Yes, it autosaves.</p>
+<br><br>
+<h3>If I switch device will my QR codes stay?</h3>
+<p>No, saved QR codes stay only on that browser.</p>
 </div>
-
 </div>
 
 <div id="tutorialPage" class="hidden">
-
 <div class="card">
 <h1>Tutorial</h1>
-
-<iframe
-width="100%"
-height="500"
+<iframe width="100%" height="500"
 src="https://www.youtube.com/embed/C_dpYF1-GjU"
-style="border:none;border-radius:20px;"
-></iframe>
-
+style="border:none;border-radius:20px;">
+</iframe>
 </div>
-
 </div>
 
 <div id="settingsPage" class="hidden">
-
 <div class="card">
-
 <h1>Settings</h1>
-
-<div class="setting-group">
-
-<div class="setting-title">
-Appearance Settings
+<p>Appearance and privacy settings coming soon.</p>
 </div>
-
-<div class="setting-item">
-<span>Theme Mode</span>
-
-<select onchange="changeTheme(this.value)">
-<option value="dark">Dark</option>
-<option value="light">Light</option>
-</select>
-</div>
-
-<div class="setting-item">
-<span>Accent Colour</span>
-
-<select onchange="changeAccent(this.value)">
-<option value="#3b82f6">Blue</option>
-<option value="#22c55e">Green</option>
-<option value="#ef4444">Red</option>
-<option value="#a855f7">Purple</option>
-</select>
 </div>
 
 </div>
 
+<div id="modal" class="modal">
+<div class="modal-content">
+<div id="modalBody"></div>
+<button onclick="closeModal()">Close</button>
 </div>
-
-</div>
-
 </div>
 
 <div id="aiButton">
@@ -391,15 +514,13 @@ QuickQR Assistant
 </div>
 
 <div id="aiMessages">
-
 <div class="aiMsg bot">
-Hi! I can help you learn how to use QuickQR.
+Hi! I can help you use QuickQR.
 </div>
-
 </div>
 
 <div id="aiInputArea">
-<input type="text" id="aiInput" placeholder="Ask something about QuickQR...">
+<input type="text" id="aiInput" placeholder="Ask something...">
 <button id="sendBtn">Send</button>
 </div>
 
@@ -413,24 +534,24 @@ Hi! I can help you learn how to use QuickQR.
 
 <video id="scannerVideo" autoplay playsinline></video>
 
-<button id="closeScanner" onclick="closeScanner()">
+<button onclick="closeScanner()">
 Close
 </button>
 
-<div class="scan-box" id="scanBox">
-
-<div class="scan-line"></div>
-
+<div class="scan-box">
 <div class="handle top-left"></div>
 <div class="handle top-right"></div>
 <div class="handle bottom-left"></div>
 <div class="handle bottom-right"></div>
-
 </div>
 
 </div>
 
 <script>
+
+let currentQRImage = "";
+let currentURL = "";
+let currentColor = "black";
 
 function showPage(page){
 
@@ -457,159 +578,180 @@ document.getElementById("settingsPage").classList.remove("hidden");
 
 }
 
-function changeTheme(mode){
+function setQRColor(color){
+currentColor = color;
+}
 
-if(mode === "light"){
+function generateQR(){
 
-document.body.style.background =
-"linear-gradient(135deg,#e2e8f0,#cbd5e1)";
+const url = document.getElementById("urlInput").value;
 
-document.body.style.color = "black";
+if(url.trim() === ""){
+alert("Please enter a URL!");
+return;
+}
 
-}else{
+currentURL = url;
 
-document.body.style.background =
-"linear-gradient(135deg,#0f172a,#1e293b)";
+const qrContainer = document.getElementById("qrcode");
 
-document.body.style.color = "white";
+qrContainer.innerHTML = "";
+
+new QRCode(qrContainer,{
+text:url,
+width:220,
+height:220,
+colorDark:currentColor,
+colorLight:"#ffffff"
+});
+
+setTimeout(()=>{
+
+const canvas = qrContainer.querySelector("canvas");
+
+if(canvas){
+currentQRImage = canvas.toDataURL("image/png");
+}
+
+},500);
+
+document.getElementById("afterGenerate").classList.remove("hidden");
 
 }
 
+function saveQR(){
+
+const name = document.getElementById("qrName").value;
+
+if(name.trim()===""){
+alert("Please enter a QR code name!");
+return;
 }
 
-function changeAccent(color){
+const creations =
+JSON.parse(localStorage.getItem("qrCreations")) || [];
 
-document.querySelectorAll("button").forEach(btn=>{
+creations.push({
+name:name,
+image:currentQRImage,
+url:currentURL,
+created:new Date().toLocaleString()
+});
 
-btn.style.background = color;
+localStorage.setItem(
+"qrCreations",
+JSON.stringify(creations)
+);
+
+loadCreations();
+
+alert("QR Code Saved!");
+
+}
+
+function loadCreations(){
+
+const creationsDiv =
+document.getElementById("creations");
+
+creationsDiv.innerHTML = "";
+
+const creations =
+JSON.parse(localStorage.getItem("qrCreations")) || [];
+
+creations.forEach(item=>{
+
+const card = document.createElement("div");
+
+card.className = "creation-card";
+
+card.innerHTML = `
+<img src="${item.image}">
+<div class="creation-name">${item.name}</div>
+`;
+
+card.onclick = ()=>{
+openInfo(item);
+};
+
+creationsDiv.appendChild(card);
 
 });
 
 }
 
-const aiButton = document.getElementById("aiButton");
-const aiChat = document.getElementById("aiChat");
-const aiMessages = document.getElementById("aiMessages");
-const aiInput = document.getElementById("aiInput");
-const sendBtn = document.getElementById("sendBtn");
+function openInfo(item){
 
-aiButton.onclick = () => {
+document.getElementById("modal").style.display = "flex";
 
-if(aiChat.style.display === "flex"){
-aiChat.style.display = "none";
+document.getElementById("modalBody").innerHTML = `
+<img src="${item.image}">
+<h2>${item.name}</h2>
+<p><b>URL:</b> ${item.url}</p>
+<p><b>Created:</b> ${item.created}</p>
+`;
+
+}
+
+function closeModal(){
+document.getElementById("modal").style.display = "none";
+}
+
+loadCreations();
+
+const aiButton =
+document.getElementById("aiButton");
+
+const aiChat =
+document.getElementById("aiChat");
+
+aiButton.onclick = ()=>{
+
+if(aiChat.style.display==="flex"){
+aiChat.style.display="none";
 }else{
-aiChat.style.display = "flex";
+aiChat.style.display="flex";
 }
 
 };
 
-function addMessage(text,type){
+document.getElementById("sendBtn").onclick = ()=>{
 
-const div = document.createElement("div");
+const input =
+document.getElementById("aiInput");
 
-div.className = `aiMsg ${type}`;
+const text = input.value.trim();
 
-div.innerText = text;
+if(text==="") return;
 
-aiMessages.appendChild(div);
+const messages =
+document.getElementById("aiMessages");
 
-aiMessages.scrollTop = aiMessages.scrollHeight;
+messages.innerHTML += `
+<div class="aiMsg user">${text}</div>
+<div class="aiMsg bot">Getting your answer...</div>
+`;
 
-}
+input.value = "";
 
-function generateQuickQRAnswer(question){
-
-question = question.toLowerCase();
-
-const quickqrKnowledge = [
-"qr",
-"quickqr",
-"save",
-"generate",
-"download",
-"share",
-"tutorial",
-"faq",
-"colour",
-"palette"
-];
-
-const related = quickqrKnowledge.some(word => question.includes(word));
-
-if(!related){
-return "Sorry! But I can't help you with unrelated questions.";
-}
-
-if(question.includes("share")){
-return "To share your QR code, open My Creations and use the share buttons.";
-}
-
-if(question.includes("save")){
-return "Your QR codes autosave inside your browser.";
-}
-
-if(question.includes("generate")){
-return "Paste a URL and press Generate QR Code.";
-}
-
-return "I found information related to QuickQR.";
-
-}
-
-function handleAI(){
-
-const text = aiInput.value.trim();
-
-if(text === "") return;
-
-addMessage(text,"user");
-
-aiInput.value = "";
-
-const thinking = document.createElement("div");
-
-thinking.className = "aiMsg bot";
-thinking.innerText = "Getting your answer...";
-
-aiMessages.appendChild(thinking);
-
-setTimeout(() => {
-
-thinking.remove();
-
-const answer = generateQuickQRAnswer(text);
-
-addMessage(answer,"bot");
-
-},1500);
-
-}
-
-sendBtn.onclick = handleAI;
-
-aiInput.addEventListener("keypress",(e)=>{
-if(e.key === "Enter"){
-handleAI();
-}
-});
+};
 
 let scannerStream;
 
 async function openScanner(){
 
-const overlay = document.getElementById("scannerOverlay");
-
-overlay.style.display = "flex";
+document.getElementById("scannerOverlay")
+.style.display = "flex";
 
 try{
 
-scannerStream = await navigator.mediaDevices.getUserMedia({
-video:{
-facingMode:"environment"
-}
+scannerStream =
+await navigator.mediaDevices.getUserMedia({
+video:true
 });
 
-document.getElementById("scannerVideo").srcObject = scannerStream;
+document.getElementById("scannerVideo")
+.srcObject = scannerStream;
 
 }catch(err){
 
@@ -621,63 +763,17 @@ alert("Camera access denied.");
 
 function closeScanner(){
 
-document.getElementById("scannerOverlay").style.display = "none";
+document.getElementById("scannerOverlay")
+.style.display = "none";
 
 if(scannerStream){
 
-scannerStream.getTracks().forEach(track => track.stop());
+scannerStream.getTracks()
+.forEach(track=>track.stop());
 
 }
 
 }
-
-const scanBox = document.getElementById("scanBox");
-
-let isDragging = false;
-let currentHandle = null;
-
-document.querySelectorAll(".handle").forEach(handle => {
-
-handle.addEventListener("mousedown",(e)=>{
-
-isDragging = true;
-currentHandle = handle;
-
-e.preventDefault();
-
-});
-
-});
-
-document.addEventListener("mousemove",(e)=>{
-
-if(!isDragging) return;
-
-const rect = scanBox.getBoundingClientRect();
-
-let width = rect.width;
-let height = rect.height;
-
-if(currentHandle.classList.contains("bottom-right")){
-
-width = e.clientX - rect.left;
-height = e.clientY - rect.top;
-
-}
-
-width = Math.max(width,150);
-height = Math.max(height,150);
-
-scanBox.style.width = width + "px";
-scanBox.style.height = height + "px";
-
-});
-
-document.addEventListener("mouseup",()=>{
-
-isDragging = false;
-
-});
 
 </script>
 

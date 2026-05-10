@@ -8,6 +8,7 @@
 <link rel="icon" type="image/png" href="favicon.png">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
 
@@ -756,7 +757,6 @@ Hi! I can help you use QuickQR.
 </div>
 
 </div>
-
 <!-- SCANNER -->
 
 <button class="scanner-btn" onclick="openScanner()">
@@ -765,22 +765,17 @@ Hi! I can help you use QuickQR.
 
 <div id="scannerOverlay">
 
-<video id="scannerVideo" autoplay playsinline></video>
+<div id="reader"
+style="
+width:100%;
+max-width:500px;
+z-index:2;
+">
+</div>
 
 <button id="closeScanner" onclick="closeScanner()">
 Close
 </button>
-
-<div class="scan-box" id="scanBox">
-
-<div class="scan-line"></div>
-
-<div class="handle top-left"></div>
-<div class="handle top-right"></div>
-<div class="handle bottom-left"></div>
-<div class="handle bottom-right"></div>
-
-</div>
 
 </div>
 
@@ -1254,30 +1249,50 @@ handleAI();
 }
 });
 
-/* SCANNER */
+/* REAL QR SCANNER */
 
-let scannerStream;
+let scanner;
 
-async function openScanner(){
+function openScanner(){
 
 document.getElementById("scannerOverlay")
 .style.display = "flex";
 
-try{
+scanner = new Html5Qrcode("reader");
 
-scannerStream =
-await navigator.mediaDevices.getUserMedia({
-video:{facingMode:"environment"}
-});
+Html5Qrcode.getCameras().then(devices => {
 
-document.getElementById("scannerVideo")
-.srcObject = scannerStream;
+if(devices && devices.length){
 
-}catch{
+scanner.start(
+{
+facingMode:"environment"
+},
+{
+fps:10,
+qrbox:250
+},
+(decodedText) => {
+
+alert("QR Code Found:\n" + decodedText);
+
+window.open(decodedText,"_blank");
+
+closeScanner();
+
+},
+(errorMessage) => {
+
+}
+);
+
+}
+
+}).catch(err => {
 
 alert("Camera access denied.");
 
-}
+});
 
 }
 
@@ -1286,63 +1301,17 @@ function closeScanner(){
 document.getElementById("scannerOverlay")
 .style.display = "none";
 
-if(scannerStream){
+if(scanner){
 
-scannerStream.getTracks()
-.forEach(track => track.stop());
+scanner.stop().then(() => {
+
+scanner.clear();
+
+});
 
 }
 
 }
-
-/* DRAG */
-
-const scanBox = document.getElementById("scanBox");
-
-let isDragging = false;
-let currentHandle = null;
-
-document.querySelectorAll(".handle")
-.forEach(handle => {
-
-handle.addEventListener("mousedown",(e)=>{
-
-isDragging = true;
-currentHandle = handle;
-
-e.preventDefault();
-
-});
-
-});
-
-document.addEventListener("mousemove",(e)=>{
-
-if(!isDragging) return;
-
-const rect = scanBox.getBoundingClientRect();
-
-let width = rect.width;
-let height = rect.height;
-
-if(currentHandle.classList.contains("bottom-right")){
-width = e.clientX - rect.left;
-height = e.clientY - rect.top;
-}
-
-width = Math.max(width,150);
-height = Math.max(height,150);
-
-scanBox.style.width = width + "px";
-scanBox.style.height = height + "px";
-
-});
-
-document.addEventListener("mouseup",()=>{
-
-isDragging = false;
-
-});
 
 /* START */
 

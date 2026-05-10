@@ -250,7 +250,185 @@ border:none;
 border-radius:20px;
 margin-top:20px;
 }
+/* SCANNER */
 
+#scannerOverlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    z-index:9999;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+#scannerVideo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    position:absolute;
+    top:0;
+    left:0;
+}
+
+.scan-box{
+    position:relative;
+    width:260px;
+    height:260px;
+    border:3px solid #3b82f6;
+    border-radius:20px;
+    z-index:2;
+    box-shadow:0 0 30px #3b82f6;
+}
+
+.handle{
+    width:24px;
+    height:24px;
+    background:#3b82f6;
+    border:3px solid white;
+    border-radius:50%;
+    position:absolute;
+}
+
+.top-left{
+    top:-12px;
+    left:-12px;
+    cursor:nwse-resize;
+}
+
+.top-right{
+    top:-12px;
+    right:-12px;
+    cursor:nesw-resize;
+}
+
+.bottom-left{
+    bottom:-12px;
+    left:-12px;
+    cursor:nesw-resize;
+}
+
+.bottom-right{
+    bottom:-12px;
+    right:-12px;
+    cursor:nwse-resize;
+}
+
+.scan-line{
+    position:absolute;
+    left:0;
+    width:100%;
+    height:4px;
+    background:#3b82f6;
+    box-shadow:0 0 20px #3b82f6;
+    animation:scanMove 2s linear infinite;
+}
+
+@keyframes scanMove{
+    0%{top:0;}
+    100%{top:calc(100% - 4px);}
+}
+
+#closeScanner{
+    position:absolute;
+    top:20px;
+    right:20px;
+    z-index:5;
+    background:red;
+}
+
+.scanner-btn{
+    position:fixed;
+    right:20px;
+    bottom:100px;
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    background:#3b82f6;
+    border:none;
+    cursor:pointer;
+    z-index:999;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow:0 0 20px rgba(59,130,246,0.7);
+    overflow:hidden;
+}
+
+.scanner-btn img{
+    width:35px;
+}
+
+@media(max-width:700px){
+
+    .scanner-btn{
+        width:55px;
+        height:55px;
+        right:15px;
+        bottom:90px;
+    }
+
+    .scan-box{
+        width:220px;
+        height:220px;
+    }
+
+}
+/* SETTINGS */
+
+.setting-group{
+margin-top:30px;
+}
+
+.setting-title{
+font-size:1.3rem;
+margin-bottom:15px;
+color:#93c5fd;
+}
+
+.setting-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(255,255,255,0.06);
+padding:15px;
+border-radius:15px;
+margin-bottom:15px;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.setting-item select,
+.setting-item input{
+width:auto;
+padding:10px;
+margin:0;
+border-radius:10px;
+border:none;
+}
+
+.danger-btn{
+background:#dc2626;
+}
+
+.danger-btn:hover{
+background:#b91c1c;
+}
+
+@media(max-width:700px){
+
+.setting-item{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.setting-item select,
+.setting-item input{
+width:100%;
+}
+
+}
 @media(max-width:700px){
 
 body{
@@ -307,6 +485,8 @@ font-size:0.72rem;
 <button onclick="showPage('home')">Home</button>
 <button onclick="showPage('faq')">FAQ</button>
 <button onclick="showPage('tutorial')">Tutorial</button>
+
+<button onclick="showPage('settings')">Settings</button>
 </div>
 
 </div>
@@ -435,7 +615,11 @@ if(page === "tutorial"){
 document.getElementById("tutorialPage").classList.remove("hidden");
 }
 
+if(page === "settings"){
+document.getElementById("settingsPage")
+.classList.remove("hidden");
 }
+
 
 function setQRColor(color){
 currentColor = color;
@@ -958,7 +1142,129 @@ Hi! I can help you learn how to use QuickQR.
 </div>
 
 </div>
+/* SETTINGS */
 
+function changeTheme(mode){
+
+if(mode === "light"){
+
+document.body.style.background =
+"linear-gradient(135deg,#e2e8f0,#cbd5e1)";
+
+document.body.style.color = "black";
+
+}else{
+
+document.body.style.background =
+"linear-gradient(135deg,#0f172a,#1e293b)";
+
+document.body.style.color = "white";
+
+}
+
+}
+
+function changeAccent(color){
+
+document.querySelectorAll("button").forEach(btn=>{
+
+btn.style.background = color;
+
+});
+
+}
+
+function changeBlur(value){
+
+document.querySelectorAll(".card,.navbar").forEach(el=>{
+
+el.style.backdropFilter =
+`blur(${value}px)`;
+
+});
+
+}
+
+function toggleAnimations(mode){
+
+if(mode === "on"){
+
+document.querySelectorAll("*").forEach(el=>{
+
+el.style.transition = "none";
+
+});
+
+}else{
+
+document.querySelectorAll("*").forEach(el=>{
+
+el.style.transition = "";
+
+});
+
+}
+
+}
+
+function clearQRData(){
+
+if(confirm("Delete all saved QR codes?")){
+
+localStorage.removeItem("qrCreations");
+
+loadCreations();
+
+alert("All QR codes deleted.");
+
+}
+
+}
+
+function exportQRData(){
+
+const data =
+localStorage.getItem("qrCreations");
+
+const blob = new Blob(
+[data],
+{type:"application/json"}
+);
+
+const a = document.createElement("a");
+
+a.href = URL.createObjectURL(blob);
+
+a.download = "quickqr-data.json";
+
+a.click();
+
+}
+
+function importQRData(event){
+
+const file = event.target.files[0];
+
+if(!file) return;
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+
+localStorage.setItem(
+"qrCreations",
+e.target.result
+);
+
+loadCreations();
+
+alert("QR data imported!");
+
+};
+
+reader.readAsText(file);
+
+}
 <script>
 
 const aiButton = document.getElementById("aiButton");
@@ -1096,8 +1402,336 @@ if(e.key === "Enter"){
 handleAI();
 }
 });
+/* SCANNER */
 
+let scannerStream;
+
+async function openScanner(){
+
+    const overlay = document.getElementById("scannerOverlay");
+
+    overlay.style.display = "flex";
+
+    try{
+
+        scannerStream = await navigator.mediaDevices.getUserMedia({
+            video:{
+                facingMode:"environment"
+            }
+        });
+
+        document.getElementById("scannerVideo").srcObject = scannerStream;
+
+    }catch(err){
+
+        alert("Camera access denied.");
+
+    }
+}
+
+function closeScanner(){
+
+    document.getElementById("scannerOverlay").style.display = "none";
+
+    if(scannerStream){
+
+        scannerStream.getTracks().forEach(track => track.stop());
+
+    }
+}
+
+/* DRAGGABLE SCAN BOX */
+
+const scanBox = document.getElementById("scanBox");
+
+let isDragging = false;
+let currentHandle = null;
+
+document.querySelectorAll(".handle").forEach(handle => {
+
+    handle.addEventListener("mousedown",(e)=>{
+
+        isDragging = true;
+        currentHandle = handle;
+
+        e.preventDefault();
+
+    });
+
+});
+
+document.addEventListener("mousemove",(e)=>{
+
+    if(!isDragging) return;
+
+    const rect = scanBox.getBoundingClientRect();
+
+    let width = rect.width;
+    let height = rect.height;
+
+    if(currentHandle.classList.contains("bottom-right")){
+
+        width = e.clientX - rect.left;
+        height = e.clientY - rect.top;
+
+    }
+
+    if(currentHandle.classList.contains("bottom-left")){
+
+        width = rect.right - e.clientX;
+        height = e.clientY - rect.top;
+
+    }
+
+    if(currentHandle.classList.contains("top-right")){
+
+        width = e.clientX - rect.left;
+        height = rect.bottom - e.clientY;
+
+    }
+
+    if(currentHandle.classList.contains("top-left")){
+
+        width = rect.right - e.clientX;
+        height = rect.bottom - e.clientY;
+
+    }
+
+    width = Math.max(width,150);
+    height = Math.max(height,150);
+
+    scanBox.style.width = width + "px";
+    scanBox.style.height = height + "px";
+
+});
+
+document.addEventListener("mouseup",()=>{
+
+    isDragging = false;
+
+});
 </script>
+<!-- SCANNER BUTTON -->
 
+<button class="scanner-btn" onclick="openScanner()">
+    <img src="scanner.png">
+</button>
+
+<!-- SCANNER OVERLAY -->
+
+<div id="scannerOverlay">
+
+    <video id="scannerVideo" autoplay playsinline></video>
+
+    <button id="closeScanner" onclick="closeScanner()">
+        Close
+    </button>
+
+    <div class="scan-box" id="scanBox">
+
+        <div class="scan-line"></div>
+
+        <div class="handle top-left"></div>
+        <div class="handle top-right"></div>
+        <div class="handle bottom-left"></div>
+        <div class="handle bottom-right"></div>
+
+    </div>
+
+</div>
+<!-- SETTINGS PAGE -->
+
+<div id="settingsPage" class="hidden">
+
+<div class="card">
+
+<h1>Settings</h1>
+
+<div class="setting-group">
+
+<div class="setting-title">
+Appearance Settings
+</div>
+
+<div class="setting-item">
+<span>Theme Mode</span>
+
+<select onchange="changeTheme(this.value)">
+<option value="dark">Dark</option>
+<option value="light">Light</option>
+</select>
+</div>
+
+<div class="setting-item">
+<span>Accent Colour</span>
+
+<select onchange="changeAccent(this.value)">
+<option value="#3b82f6">Blue</option>
+<option value="#22c55e">Green</option>
+<option value="#ef4444">Red</option>
+<option value="#a855f7">Purple</option>
+</select>
+</div>
+
+<div class="setting-item">
+<span>Blur Intensity</span>
+
+<input
+type="range"
+min="0"
+max="20"
+value="10"
+oninput="changeBlur(this.value)"
+>
+</div>
+
+<div class="setting-item">
+<span>Reduced Animations</span>
+
+<select onchange="toggleAnimations(this.value)">
+<option value="off">Off</option>
+<option value="on">On</option>
+</select>
+</div>
+
+</div>
+
+<div class="setting-group">
+
+<div class="setting-title">
+Privacy Settings
+</div>
+
+<div class="setting-item">
+<span>Export QR Data</span>
+
+<button onclick="exportQRData()">
+Export
+</button>
+</div>
+
+<div class="setting-item">
+<span>Import QR Data</span>
+
+<input
+type="file"
+id="importFile"
+onchange="importQRData(event)"
+>
+</div>
+
+<div class="setting-item">
+<span>Clear Saved QR Codes</span>
+
+<button
+class="danger-btn"
+onclick="clearQRData()"
+>
+Clear
+</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<!-- SETTINGS PAGE -->
+
+<div id="settingsPage" class="hidden">
+
+<div class="card">
+
+<h1>Settings</h1>
+
+<div class="setting-group">
+
+<div class="setting-title">
+Appearance Settings
+</div>
+
+<div class="setting-item">
+<span>Theme Mode</span>
+
+<select onchange="changeTheme(this.value)">
+<option value="dark">Dark</option>
+<option value="light">Light</option>
+</select>
+</div>
+
+<div class="setting-item">
+<span>Accent Colour</span>
+
+<select onchange="changeAccent(this.value)">
+<option value="#3b82f6">Blue</option>
+<option value="#22c55e">Green</option>
+<option value="#ef4444">Red</option>
+<option value="#a855f7">Purple</option>
+</select>
+</div>
+
+<div class="setting-item">
+<span>Blur Intensity</span>
+
+<input
+type="range"
+min="0"
+max="20"
+value="10"
+oninput="changeBlur(this.value)"
+>
+</div>
+
+<div class="setting-item">
+<span>Reduced Animations</span>
+
+<select onchange="toggleAnimations(this.value)">
+<option value="off">Off</option>
+<option value="on">On</option>
+</select>
+</div>
+
+</div>
+
+<div class="setting-group">
+
+<div class="setting-title">
+Privacy Settings
+</div>
+
+<div class="setting-item">
+<span>Export QR Data</span>
+
+<button onclick="exportQRData()">
+Export
+</button>
+</div>
+
+<div class="setting-item">
+<span>Import QR Data</span>
+
+<input
+type="file"
+id="importFile"
+onchange="importQRData(event)"
+>
+</div>
+
+<div class="setting-item">
+<span>Clear Saved QR Codes</span>
+
+<button
+class="danger-btn"
+onclick="clearQRData()"
+>
+Clear
+</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
 </body>
 </html> 

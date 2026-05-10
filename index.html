@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>QuickQR</title>
 
 <link rel="icon" type="image/png" href="favicon.png">
@@ -11,6 +13,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -49,7 +52,7 @@ gap:20px;
 }
 
 .logo{
-font-size:2.2rem;
+font-size:2.3rem;
 font-weight:bold;
 }
 
@@ -90,13 +93,6 @@ border-radius:15px;
 margin-top:15px;
 margin-bottom:20px;
 font-size:1rem;
-}
-
-.note{
-margin:20px 0;
-line-height:1.8;
-text-align:center;
-color:#93c5fd;
 }
 
 .palette{
@@ -176,8 +172,6 @@ padding:30px;
 border-radius:25px;
 max-width:700px;
 width:100%;
-max-height:90vh;
-overflow:auto;
 text-align:center;
 }
 
@@ -187,6 +181,10 @@ background:white;
 padding:10px;
 border-radius:15px;
 margin-bottom:20px;
+}
+
+.setting-item{
+margin-top:20px;
 }
 
 #aiButton{
@@ -296,40 +294,8 @@ z-index:999;
 width:35px;
 }
 
-#scannerOverlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.85);
-display:none;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:9999;
-}
-
-#scannerVideo{
-width:100%;
-height:100%;
-object-fit:contain;
-position:absolute;
-top:0;
-left:0;
-}
-
-.scan-box{
-position:relative;
-width:260px;
-height:260px;
-border:3px solid #3b82f6;
-border-radius:20px;
-z-index:2;
-}
-
-.setting-item{
-margin-top:20px;
-}
-
 @media(max-width:700px){
+
 .navbar{
 flex-direction:column;
 }
@@ -339,14 +305,22 @@ width:95%;
 right:2.5%;
 height:75vh;
 }
+
+.creation-card img{
+width:110px;
 }
+
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
 <div class="navbar">
+
 <div class="logo">QuickQR</div>
 
 <div class="nav-links">
@@ -355,18 +329,16 @@ height:75vh;
 <button onclick="showPage('tutorial')">Tutorial</button>
 <button onclick="showPage('settings')">Settings</button>
 </div>
+
 </div>
 
 <div id="homePage">
 
 <div class="card">
+
 <h2>Enter Your Website URL</h2>
 
 <input type="text" id="urlInput" placeholder="https://example.com">
-
-<p class="note">
-*Note: Before generating your QR code, you can select a colour.
-</p>
 
 <div class="palette">
 <div class="color red" onclick="setQRColor('red')"></div>
@@ -382,73 +354,115 @@ height:75vh;
 <div id="qrcode"></div>
 
 <div id="afterGenerate" class="hidden">
+
 <input type="text" id="qrName" placeholder="Enter QR Code Name">
+
 <button onclick="saveQR()">Save QR Code</button>
+
 </div>
+
 </div>
 
 <div class="card">
+
 <h2>My Creations</h2>
+
 <div id="creations" class="creation-grid"></div>
+
 </div>
 
 </div>
 
 <div id="faqPage" class="hidden">
+
 <div class="card">
+
 <h1>FAQ</h1>
+
 <br>
-<h3>Does my qr codes save?</h3>
-<p>Yes, it autosaves.</p>
+
+<h3>Do QR codes autosave?</h3>
+<p>Yes.</p>
+
 <br><br>
-<h3>If I switch device will my QR codes stay?</h3>
-<p>No, they stay on the same browser.</p>
+
+<h3>Do they sync between devices?</h3>
+<p>No.</p>
+
 </div>
+
 </div>
 
 <div id="tutorialPage" class="hidden">
+
 <div class="card">
+
 <h1>Tutorial</h1>
-<iframe width="100%" height="500"
-src="https://www.youtube.com/embed/C_dpYF1-GjU"
+
+<iframe
+width="100%"
+height="500"
+src="https://www.youtube.com/embed/v=SueuEgfWI4A"
 style="border:none;border-radius:20px;">
 </iframe>
+
 </div>
+
 </div>
 
 <div id="settingsPage" class="hidden">
+
 <div class="card">
+
 <h1>Settings</h1>
 
 <div class="setting-item">
-<p>Theme Mode</p>
+
+<p>Theme</p>
+
 <select onchange="changeTheme(this.value)">
 <option value="dark">Dark</option>
 <option value="light">Light</option>
 </select>
+
 </div>
 
 <div class="setting-item">
+
 <p>Accent Colour</p>
+
 <select onchange="changeAccent(this.value)">
 <option value="#3b82f6">Blue</option>
 <option value="#22c55e">Green</option>
 <option value="#ef4444">Red</option>
 </select>
-</div>
-
-<button onclick="clearQRData()">Clear Saved QR Codes</button>
 
 </div>
+
+<div class="setting-item">
+
+<button onclick="clearQRData()">
+Clear Saved QR Codes
+</button>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
 
 <div id="modal" class="modal">
+
 <div class="modal-content">
+
 <div id="modalBody"></div>
+
 <button onclick="closeModal()">Close</button>
+
 </div>
+
 </div>
 
 <div id="aiButton">
@@ -456,25 +470,27 @@ style="border:none;border-radius:20px;">
 </div>
 
 <div id="aiChat">
-<div id="aiHeader">QuickQR Assistant</div>
-<div id="aiMessages">
-<div class="aiMsg bot">Hi! I can help you use QuickQR.</div>
+
+<div id="aiHeader">
+QuickQR Assistant
 </div>
+
+<div id="aiMessages">
+<div class="aiMsg bot">
+Hi! I can help you use QuickQR.
+</div>
+</div>
+
 <div id="aiInputArea">
 <input type="text" id="aiInput" placeholder="Ask something...">
 <button id="sendBtn">Send</button>
 </div>
+
 </div>
 
 <button class="scanner-btn" onclick="openScanner()">
 <img src="scanner.png">
 </button>
-
-<div id="scannerOverlay">
-<video id="scannerVideo" autoplay playsinline></video>
-<button onclick="closeScanner()">Close</button>
-<div class="scan-box"></div>
-</div>
 
 <script>
 
@@ -495,21 +511,22 @@ pages.forEach(id=>{
 document.getElementById(id).classList.add("hidden");
 });
 
-if(page === "home"){
+if(page==="home"){
 document.getElementById("homePage").classList.remove("hidden");
 }
 
-if(page === "faq"){
+if(page==="faq"){
 document.getElementById("faqPage").classList.remove("hidden");
 }
 
-if(page === "tutorial"){
+if(page==="tutorial"){
 document.getElementById("tutorialPage").classList.remove("hidden");
 }
 
-if(page === "settings"){
+if(page==="settings"){
 document.getElementById("settingsPage").classList.remove("hidden");
 }
+
 }
 
 function setQRColor(color){
@@ -520,7 +537,7 @@ function generateQR(){
 
 const url = document.getElementById("urlInput").value;
 
-if(url.trim() === ""){
+if(url.trim()===""){
 alert("Please enter a URL!");
 return;
 }
@@ -528,6 +545,7 @@ return;
 currentURL = url;
 
 const qrContainer = document.getElementById("qrcode");
+
 qrContainer.innerHTML = "";
 
 new QRCode(qrContainer,{
@@ -539,13 +557,18 @@ colorLight:"#ffffff"
 });
 
 setTimeout(()=>{
+
 const canvas = qrContainer.querySelector("canvas");
+
 if(canvas){
 currentQRImage = canvas.toDataURL("image/png");
 }
+
 },500);
 
-document.getElementById("afterGenerate").classList.remove("hidden");
+document.getElementById("afterGenerate")
+.classList.remove("hidden");
+
 }
 
 function saveQR(){
@@ -557,7 +580,8 @@ alert("Please enter a QR code name!");
 return;
 }
 
-const creations = JSON.parse(localStorage.getItem("qrCreations")) || [];
+const creations =
+JSON.parse(localStorage.getItem("qrCreations")) || [];
 
 creations.push({
 name:name,
@@ -566,23 +590,31 @@ url:currentURL,
 created:new Date().toLocaleString()
 });
 
-localStorage.setItem("qrCreations",JSON.stringify(creations));
+localStorage.setItem(
+"qrCreations",
+JSON.stringify(creations)
+);
 
 loadCreations();
 
 alert("QR Code Saved!");
+
 }
 
 function loadCreations(){
 
-const creationsDiv = document.getElementById("creations");
+const creationsDiv =
+document.getElementById("creations");
+
 creationsDiv.innerHTML = "";
 
-const creations = JSON.parse(localStorage.getItem("qrCreations")) || [];
+const creations =
+JSON.parse(localStorage.getItem("qrCreations")) || [];
 
 creations.forEach(item=>{
 
 const card = document.createElement("div");
+
 card.className = "creation-card";
 
 card.innerHTML = `
@@ -595,154 +627,183 @@ openInfo(item);
 };
 
 creationsDiv.appendChild(card);
+
 });
+
 }
 
 function openInfo(item){
 
-const modal = document.getElementById("modal");
-modal.style.display = "flex";
+document.getElementById("modal")
+.style.display = "flex";
 
-document.getElementById("modalBody").innerHTML = `
+document.getElementById("modalBody")
+.innerHTML = `
 <img src="${item.image}">
 <h2>${item.name}</h2>
 <p><b>URL:</b> ${item.url}</p>
 <p><b>Created:</b> ${item.created}</p>
 `;
+
 }
 
 function closeModal(){
-document.getElementById("modal").style.display = "none";
+
+document.getElementById("modal")
+.style.display = "none";
+
 }
 
 function changeTheme(mode){
 
-if(mode === "light"){
-document.body.style.background = "linear-gradient(135deg,#e2e8f0,#cbd5e1)";
+if(mode==="light"){
+
+document.body.style.background =
+"linear-gradient(135deg,#e2e8f0,#cbd5e1)";
+
 document.body.style.color = "black";
+
 }else{
-document.body.style.background = "linear-gradient(135deg,#0f172a,#1e293b)";
+
+document.body.style.background =
+"linear-gradient(135deg,#0f172a,#1e293b)";
+
 document.body.style.color = "white";
+
 }
+
 }
 
 function changeAccent(color){
+
 document.querySelectorAll("button").forEach(btn=>{
 btn.style.background = color;
 });
+
 }
 
 function clearQRData(){
+
 if(confirm("Delete all QR codes?")){
+
 localStorage.removeItem("qrCreations");
+
 loadCreations();
+
 }
+
 }
 
 loadCreations();
 
-const aiButton = document.getElementById("aiButton");
-const aiChat = document.getElementById("aiChat");
+const aiButton =
+document.getElementById("aiButton");
+
+const aiChat =
+document.getElementById("aiChat");
 
 aiButton.onclick = ()=>{
-aiChat.style.display = aiChat.style.display === "flex" ? "none" : "flex";
+
+if(aiChat.style.display==="flex"){
+aiChat.style.display="none";
+}else{
+aiChat.style.display="flex";
+}
+
 };
 
-const sendBtn = document.getElementById("sendBtn");
-const aiInput = document.getElementById("aiInput");
-const aiMessages = document.getElementById("aiMessages");
+const sendBtn =
+document.getElementById("sendBtn");
+
+const aiInput =
+document.getElementById("aiInput");
+
+const aiMessages =
+document.getElementById("aiMessages");
 
 sendBtn.onclick = ()=>{
 
 const text = aiInput.value.trim();
-if(text === "") return;
 
-aiMessages.innerHTML += `<div class="aiMsg user">${text}</div>`;
-aiMessages.innerHTML += `<div class="aiMsg bot">Getting your answer...</div>`;
+if(text==="") return;
+
+aiMessages.innerHTML += `
+<div class="aiMsg user">${text}</div>
+`;
+
+aiMessages.innerHTML += `
+<div class="aiMsg bot">
+Getting your answer...
+</div>
+`;
 
 aiInput.value = "";
+
 };
 
 /* QR SCANNER */
 
 function openScanner(){
 
-    const input = document.createElement("input");
+const input = document.createElement("input");
 
-    input.type = "file";
+input.type = "file";
 
-    input.accept = "image/*";
+input.accept = "image/*";
 
-    input.onchange = async (e) => {
+input.onchange = (e)=>{
 
-        const file = e.target.files[0];
+const file = e.target.files[0];
 
-        if(!file) return;
+if(!file) return;
 
-        const img = new Image();
+const img = new Image();
 
-        img.src = URL.createObjectURL(file);
+img.src = URL.createObjectURL(file);
 
-        img.onload = async () => {
+img.onload = ()=>{
 
-            const canvas = document.createElement("canvas");
+const canvas = document.createElement("canvas");
 
-            const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
 
-            canvas.width = img.width;
-            canvas.height = img.height;
+canvas.width = img.width;
+canvas.height = img.height;
 
-            ctx.drawImage(img,0,0);
+ctx.drawImage(img,0,0);
 
-            const imageData = ctx.getImageData(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
+const imageData = ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
 
-            if(typeof jsQR === "undefined"){
+const code = jsQR(
+imageData.data,
+canvas.width,
+canvas.height
+);
 
-                alert("QR scanner library missing.");
+if(code){
 
-                return;
+window.open(code.data,"_blank");
 
-            }
+}else{
 
-            const code = jsQR(
-                imageData.data,
-                canvas.width,
-                canvas.height
-            );
-
-            if(code){
-
-                window.open(code.data,"_blank");
-
-            }else{
-
-                alert("No QR code found.");
-
-            }
-
-        };
-
-    };
-
-    input.click();
+alert("No QR code found.");
 
 }
 
-function closeScanner(){}
+};
 
-document.getElementById("scannerOverlay").style.display = "none";
+};
 
-if(scannerStream){
-scannerStream.getTracks().forEach(track=>track.stop());
-}
+input.click();
+
 }
 
 </script>
 
 </body>
-</html
+</html>

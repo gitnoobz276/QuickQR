@@ -35,6 +35,54 @@ max-width:1200px;
 margin:auto;
 }
 
+
+.quest-item{
+margin-top:25px;
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,0.06);
+}
+#coinDisplay{
+display:flex;
+align-items:center;
+gap:10px;
+background:rgba(255,255,255,0.08);
+padding:10px 15px;
+border-radius:15px;
+font-weight:bold;
+}
+
+.progress-bar{
+width:100%;
+height:25px;
+background:#111827;
+border-radius:20px;
+overflow:hidden;
+margin-top:20px;
+}
+
+#progressFill{
+height:100%;
+width:0%;
+background:#3b82f6;
+transition:0.3s;
+}
+
+
+.shop-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.shop-item{
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,0.06);
+text-align:center;
+}
+
 /* NAVBAR */
 
 .navbar{
@@ -424,11 +472,18 @@ height:60px;
 
 <div class="logo">QuickQR</div>
 
+<div id="coinDisplay">
+<img src="scanner.png" width="30">
+<span id="coinAmount">0</span>
+</div>
+
 <div class="nav-links">
 <button onclick="showPage('home')">Home</button>
 <button onclick="showPage('faq')">FAQ</button>
 <button onclick="showPage('tutorial')">Tutorial</button>
 <button onclick="showPage('settings')">Settings</button>
+<button onclick="showPage('quests')">Quests</button>
+<button onclick="showPage('shop')">Theme Shop</button>
 </div>
 
 </div>
@@ -592,6 +647,141 @@ Privacy
 
 </div>
 
+function resetDailyQuests(){
+
+const today = new Date().toDateString();
+
+const savedDay = localStorage.getItem("questDay");
+
+if(savedDay !== today){
+
+quests = {
+q1:false,
+q2:false,
+q3:false
+};
+
+claimed = {
+q1:false,
+q2:false,
+q3:false
+};
+
+localStorage.setItem("questDay",today);
+
+localStorage.setItem(
+"claimedQuests",
+JSON.stringify(claimed)
+);
+
+}
+
+}
+
+<div id="questsPage" class="hidden">
+
+<div class="card">
+
+<h1>Daily Quests</h1>
+
+<p id="questTimer">
+NEW QUESTS IN: 24:00:00
+</p>
+
+<div class="progress-bar">
+<div id="progressFill"></div>
+</div>
+
+<p id="progressText">
+0% Complete (0/3 quests)
+</p>
+
+<div class="quest-item">
+<h3>Create 1 QR Code</h3>
+<p>Reward: 2 QR Tokens</p>
+<button id="claim1" onclick="claimQuest(1)">
+Claim
+</button>
+</div>
+
+<div class="quest-item">
+<h3>Try 3 Colours</h3>
+<p>Reward: 2 QR Tokens</p>
+<button id="claim2" onclick="claimQuest(2)">
+Claim
+</button>
+</div>
+
+<div class="quest-item">
+<h3>Save 1 QR Code</h3>
+<p>Reward: 2 QR Tokens</p>
+<button id="claim3" onclick="claimQuest(3)">
+Claim
+</button>
+</div>
+
+</div>
+
+</div>
+
+<div id="shopPage" class="hidden">
+
+<div class="card">
+
+<h1>Theme Shop</h1>
+
+<div class="shop-grid">
+
+<div class="shop-item">
+<h3>Neon Theme</h3>
+<p>10 Tokens</p>
+<button onclick="buyItem('neon',10)">
+Buy
+</button>
+<button onclick="equipTheme('neon')">
+Equip
+</button>
+</div>
+
+<div class="shop-item">
+<h3>Galaxy Gradient</h3>
+<p>8 Tokens</p>
+<button onclick="buyItem('galaxy',8)">
+Buy
+</button>
+<button onclick="equipGradient('galaxy')">
+Equip
+</button>
+</div>
+
+<div class="shop-item">
+<h3>Golden Frame</h3>
+<p>12 Tokens</p>
+<button onclick="buyItem('goldFrame',12)">
+Buy
+</button>
+<button onclick="equipFrame('goldFrame')">
+Equip
+</button>
+</div>
+
+<div class="shop-item">
+<h3>Glow Effect</h3>
+<p>6 Tokens</p>
+<button onclick="buyItem('glow',6)">
+Buy
+</button>
+<button onclick="equipEffect('glow')">
+Equip
+</button>
+</div>
+
+</div>
+
+</div>
+
+</div>/style
+
 <!-- MODAL -->
 
 <div id="modal" class="modal">
@@ -641,6 +831,167 @@ let currentColor = "black";
 let currentQRImage = "";
 let currentURL = "";
 
+let qrCoins = parseInt(localStorage.getItem("qrCoins")) || 0;
+
+let quests = {
+q1:false,
+q2:false,
+q3:false
+};
+
+let claimed = JSON.parse(localStorage.getItem("claimedQuests")) || {
+q1:false,
+q2:false,
+q3:false
+};
+
+let ownedItems = JSON.parse(localStorage.getItem("ownedItems")) || [];
+
+function updateCoins(){
+
+localStorage.setItem("qrCoins",qrCoins);
+
+document.getElementById("coinAmount").innerText = qrCoins;
+
+}       
+
+function completeQuest(id){
+
+quests[`q${id}`] = true;
+
+updateProgress();
+
+}
+
+function claimQuest(id){
+
+if(claimed[`q${id}`]){
+alert("You already claimed this today.");
+return;
+}
+
+if(!quests[`q${id}`]){
+alert("Quest not completed yet.");
+return;
+}
+
+qrCoins += 2;
+
+claimed[`q${id}`] = true;
+
+localStorage.setItem(
+"claimedQuests",
+JSON.stringify(claimed)
+);
+
+updateCoins();
+
+alert("+2 QR Tokens earned!");
+
+}
+
+function updateProgress(){
+
+let completed = 0;
+
+if(quests.q1) completed++;
+if(quests.q2) completed++;
+if(quests.q3) completed++;
+
+const percent = (completed / 3) * 100;
+
+document.getElementById("progressFill")
+.style.width = percent + "%";
+
+document.getElementById("progressText")
+.innerText = `${percent}% Complete (${completed}/3 quests)`;
+
+}
+
+function buyItem(item,cost){
+
+if(ownedItems.includes(item)){
+alert("Sorry! But you have already bought this.");
+return;
+}
+
+if(qrCoins < cost){
+alert("Sorry! You don't have enough coins.");
+return;
+}
+
+qrCoins -= cost;
+
+ownedItems.push(item);
+
+localStorage.setItem(
+"ownedItems",
+JSON.stringify(ownedItems)
+);
+
+updateCoins();
+
+alert("Purchased successfully!");
+
+}
+
+function equipTheme(theme){
+
+if(!ownedItems.includes(theme)){
+alert("Buy this first.");
+return;
+}
+
+localStorage.setItem("equippedTheme",theme);
+
+if(theme === "neon"){
+
+document.body.style.background =
+"linear-gradient(135deg,#00ffff,#0f172a)";
+
+}
+
+}
+
+function equipGradient(gradient){
+
+if(!ownedItems.includes(gradient)){
+alert("Buy this first.");
+return;
+}
+
+localStorage.setItem("equippedGradient",gradient);
+
+alert("Gradient equipped!");
+
+}
+
+function equipFrame(frame){
+
+if(!ownedItems.includes(frame)){
+alert("Buy this first.");
+return;
+}
+
+localStorage.setItem("equippedFrame",frame);
+
+alert("Frame equipped!");
+
+}
+
+function equipEffect(effect){
+
+if(!ownedItems.includes(effect)){
+alert("Buy this first.");
+return;
+}
+
+localStorage.setItem("equippedEffect",effect);
+
+alert("Effect equipped!");
+
+}
+
 /* PAGE */
 
 function showPage(page){
@@ -669,9 +1020,28 @@ document.getElementById("settingsPage").classList.remove("hidden");
 }
 
 /* QR */
-
 function setQRColor(color){
+
 currentColor = color;
+
+let usedColours =
+JSON.parse(localStorage.getItem("usedColours")) || [];
+
+if(!usedColours.includes(color)){
+
+usedColours.push(color);
+
+localStorage.setItem(
+"usedColours",
+JSON.stringify(usedColours)
+);
+
+}
+
+if(usedColours.length >= 3){
+completeQuest(2);
+}
+
 }
 
 function generateQR(){
@@ -682,6 +1052,9 @@ if(url.trim() === ""){
 alert("Please enter a URL!");
 return;
 }
+
+completeQuest(1);
+
 
 currentURL = url;
 
@@ -737,7 +1110,46 @@ localStorage.setItem(
 JSON.stringify(creations)
 );
 
+buyTheme()
+equipTheme()
+loadShop()
+
 loadCreations();
+
+resetDailyQuests();
+startQuestTimer();
+
+updateCoins();
+updateProgress();
+
+loadQuestData();
+loadShop();
+
+function startQuestTimer(){
+
+setInterval(()=>{
+
+const now = new Date();
+
+const tomorrow = new Date();
+
+tomorrow.setHours(24,0,0,0);
+
+const diff = tomorrow - now;
+
+const hours = Math.floor(diff / 1000 / 60 / 60);
+const minutes = Math.floor(diff / 1000 / 60 % 60);
+const seconds = Math.floor(diff / 1000 % 60);
+
+document.getElementById("questTimer")
+.innerText =
+`NEW QUESTS IN : ${hours}:${minutes}:${seconds}`;
+
+},1000);
+
+}
+
+completeQuest(3);
 
 alert("QR Code Saved!");
 

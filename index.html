@@ -647,6 +647,54 @@ Privacy
 
 </div>
 
+<!-- QUESTS -->
+
+<div id="questsPage" class="hidden">
+
+<div class="card">
+
+<h1>Daily Quests</h1>
+
+<p id="questTimer">
+NEW QUESTS IN: 24:00:00
+</p>
+
+<div class="progress-bar">
+<div id="progressFill"></div>
+</div>
+
+<p id="progressText">
+0% Complete (0/3 quests)
+</p>
+
+<div class="quest-item">
+<h3>Create 1 QR Code</h3>
+<p>Reward: 2 QR Tokens</p>
+<button onclick="claimQuest(1)">
+Claim
+</button>
+</div>
+
+<div class="quest-item">
+<h3>Try 3 Colours</h3>
+<p>Reward: 2 QR Tokens</p>
+<button onclick="claimQuest(2)">
+Claim
+</button>
+</div>
+
+<div class="quest-item">
+<h3>Save 1 QR Code</h3>
+<p>Reward: 2 QR Tokens</p>
+<button onclick="claimQuest(3)">
+Claim
+</button>
+</div>
+
+</div>
+
+</div>
+
 <!-- MODAL -->
 
 <div id="modal" class="modal">
@@ -759,51 +807,307 @@ JSON.stringify(claimed)
 
 }
 
-<div id="questsPage" class="hidden">
+<script>
 
-<div class="card">
+/* =========================
+   VARIABLES
+========================= */
 
-<h1>Daily Quests</h1>
+let currentColor = "black";
+let currentQRImage = "";
+let currentURL = "";
 
-<p id="questTimer">
-NEW QUESTS IN: 24:00:00
+let qrCoins =
+parseInt(localStorage.getItem("qrCoins")) || 0;
+
+let quests = {
+q1:false,
+q2:false,
+q3:false
+};
+
+let claimed =
+JSON.parse(localStorage.getItem("claimedQuests")) || {
+q1:false,
+q2:false,
+q3:false
+};
+
+let ownedItems =
+JSON.parse(localStorage.getItem("ownedItems")) || [];
+
+/* =========================
+   PAGE SYSTEM
+========================= */
+
+function showPage(page){
+
+document.getElementById("homePage")
+.classList.add("hidden");
+
+document.getElementById("faqPage")
+.classList.add("hidden");
+
+document.getElementById("tutorialPage")
+.classList.add("hidden");
+
+document.getElementById("settingsPage")
+.classList.add("hidden");
+
+const questsPage =
+document.getElementById("questsPage");
+
+if(questsPage){
+questsPage.classList.add("hidden");
+}
+
+const shopPage =
+document.getElementById("shopPage");
+
+if(shopPage){
+shopPage.classList.add("hidden");
+}
+
+if(page === "home"){
+document.getElementById("homePage")
+.classList.remove("hidden");
+}
+
+if(page === "faq"){
+document.getElementById("faqPage")
+.classList.remove("hidden");
+}
+
+if(page === "tutorial"){
+document.getElementById("tutorialPage")
+.classList.remove("hidden");
+}
+
+if(page === "settings"){
+document.getElementById("settingsPage")
+.classList.remove("hidden");
+}
+
+if(page === "quests" && questsPage){
+questsPage.classList.remove("hidden");
+}
+
+if(page === "shop" && shopPage){
+shopPage.classList.remove("hidden");
+}
+
+}
+
+/* =========================
+   QR SYSTEM
+========================= */
+
+function setQRColor(color){
+
+currentColor = color;
+
+let usedColours =
+JSON.parse(localStorage.getItem("usedColours")) || [];
+
+if(!usedColours.includes(color)){
+
+usedColours.push(color);
+
+localStorage.setItem(
+"usedColours",
+JSON.stringify(usedColours)
+);
+
+}
+
+if(usedColours.length >= 3){
+completeQuest(2);
+}
+
+}
+
+function generateQR(){
+
+const url =
+document.getElementById("urlInput").value;
+
+if(url.trim() === ""){
+alert("Please enter a URL!");
+return;
+}
+
+currentURL = url;
+
+const qrContainer =
+document.getElementById("qrcode");
+
+qrContainer.innerHTML = "";
+
+new QRCode(qrContainer,{
+text:url,
+width:220,
+height:220,
+colorDark:currentColor,
+colorLight:"#ffffff"
+});
+
+setTimeout(()=>{
+
+const canvas =
+qrContainer.querySelector("canvas");
+
+if(!canvas) return;
+
+currentQRImage =
+canvas.toDataURL("image/png");
+
+document.getElementById("afterGenerate")
+.classList.remove("hidden");
+
+completeQuest(1);
+
+},500);
+
+}
+
+function saveQR(){
+
+const name =
+document.getElementById("qrName").value;
+
+if(name.trim() === ""){
+alert("Please enter a QR code name!");
+return;
+}
+
+const creations =
+JSON.parse(localStorage.getItem("qrCreations")) || [];
+
+creations.push({
+name:name,
+image:currentQRImage,
+url:currentURL,
+color:currentColor,
+created:new Date().toLocaleString()
+});
+
+localStorage.setItem(
+"qrCreations",
+JSON.stringify(creations)
+);
+
+loadCreations();
+
+completeQuest(3);
+
+alert("QR Code Saved!");
+
+}
+
+/* =========================
+   LOAD CREATIONS
+========================= */
+
+function loadCreations(){
+
+const creationsDiv =
+document.getElementById("creations");
+
+if(!creationsDiv) return;
+
+creationsDiv.innerHTML = "";
+
+const creations =
+JSON.parse(localStorage.getItem("qrCreations")) || [];
+
+creations.forEach(item=>{
+
+const card =
+document.createElement("div");
+
+card.className = "creation-card";
+
+card.innerHTML = `
+<img src="${item.image}">
+<div class="creation-name">
+${item.name}
+</div>
+`;
+
+card.onclick = ()=>openInfo(item);
+
+creationsDiv.appendChild(card);
+
+});
+
+}
+
+/* =========================
+   MODAL
+========================= */
+
+function openInfo(item){
+
+document.getElementById("modal")
+.style.display = "flex";
+
+document.getElementById("modalBody")
+.innerHTML = `
+
+<img src="${item.image}">
+
+<h2>${item.name}</h2>
+
+<p style="margin-top:15px;">
+<b>URL:</b> ${item.url}
 </p>
 
-<div class="progress-bar">
-<div id="progressFill"></div>
-</div>
-
-<p id="progressText">
-0% Complete (0/3 quests)
+<p style="margin-top:15px;">
+<b>Created:</b> ${item.created}
 </p>
 
-<div class="quest-item">
-<h3>Create 1 QR Code</h3>
-<p>Reward: 2 QR Tokens</p>
-<button id="claim1" onclick="claimQuest(1)">
-Claim
-</button>
-</div>
+`;
 
-<div class="quest-item">
-<h3>Try 3 Colours</h3>
-<p>Reward: 2 QR Tokens</p>
-<button id="claim2" onclick="claimQuest(2)">
-Claim
-</button>
-</div>
+}
 
-<div class="quest-item">
-<h3>Save 1 QR Code</h3>
-<p>Reward: 2 QR Tokens</p>
-<button id="claim3" onclick="claimQuest(3)">
-Claim
-</button>
-</div>
+function closeModal(){
 
-</div>
+document.getElementById("modal")
+.style.display = "none";
 
-</div>
+}
+
+/* =========================
+   COINS
+========================= */
+
+function updateCoins(){
+
+localStorage.setItem(
+"qrCoins",
+qrCoins
+);
+
+const coinAmount =
+document.getElementById("coinAmount");
+
+if(coinAmount){
+coinAmount.innerText = qrCoins;
+}
+
+}
+
+/* =========================
+   QUESTS
+========================= */
+
+function completeQuest(id){
+
+quests[`q${id}`] = true;
+
+updateProgress();
+
+}
 
 function claimQuest(id){
 
@@ -840,15 +1144,107 @@ if(quests.q1) completed++;
 if(quests.q2) completed++;
 if(quests.q3) completed++;
 
-const percent = (completed / 3) * 100;
+const percent =
+(completed / 3) * 100;
 
-document.getElementById("progressFill")
-.style.width = percent + "%";
+const fill =
+document.getElementById("progressFill");
 
-document.getElementById("progressText")
-.innerText = `${percent}% Complete (${completed}/3 quests)`;
+if(fill){
+fill.style.width = percent + "%";
+}
+
+const text =
+document.getElementById("progressText");
+
+if(text){
+text.innerText =
+`${percent}% Complete (${completed}/3 quests)`;
+}
 
 }
+
+function startQuestTimer(){
+
+setInterval(()=>{
+
+const now = new Date();
+
+const tomorrow = new Date();
+
+tomorrow.setHours(24,0,0,0);
+
+const diff = tomorrow - now;
+
+const hours =
+Math.floor(diff / 1000 / 60 / 60);
+
+const minutes =
+Math.floor(diff / 1000 / 60 % 60);
+
+const seconds =
+Math.floor(diff / 1000 % 60);
+
+const timer =
+document.getElementById("questTimer");
+
+if(timer){
+
+timer.innerText =
+`NEW QUESTS IN : ${hours}:${minutes}:${seconds}`;
+
+}
+
+},1000);
+
+}
+
+function resetDailyQuests(){
+
+const today =
+new Date().toDateString();
+
+const savedDay =
+localStorage.getItem("questDay");
+
+if(savedDay !== today){
+
+quests = {
+q1:false,
+q2:false,
+q3:false
+};
+
+claimed = {
+q1:false,
+q2:false,
+q3:false
+};
+
+localStorage.setItem(
+"questDay",
+today
+);
+
+localStorage.setItem(
+"claimedQuests",
+JSON.stringify(claimed)
+);
+
+}
+
+}
+
+function loadQuestData(){
+
+updateProgress();
+updateCoins();
+
+}
+
+/* =========================
+   SHOP
+========================= */
 
 function buyItem(item,cost){
 
@@ -884,7 +1280,10 @@ alert("Buy this first.");
 return;
 }
 
-localStorage.setItem("equippedTheme",theme);
+localStorage.setItem(
+"equippedTheme",
+theme
+);
 
 if(theme === "neon"){
 
@@ -893,422 +1292,17 @@ document.body.style.background =
 
 }
 
-}
-
-function equipGradient(gradient){
-
-if(!ownedItems.includes(gradient)){
-alert("Buy this first.");
-return;
-}
-
-localStorage.setItem("equippedGradient",gradient);
-
-alert("Gradient equipped!");
+alert("Theme equipped!");
 
 }
 
-function equipFrame(frame){
-
-if(!ownedItems.includes(frame)){
-alert("Buy this first.");
-return;
-}
-
-localStorage.setItem("equippedFrame",frame);
-
-alert("Frame equipped!");
+function loadShop(){
 
 }
 
-function equipEffect(effect){
-
-if(!ownedItems.includes(effect)){
-alert("Buy this first.");
-return;
-}
-
-localStorage.setItem("equippedEffect",effect);
-
-alert("Effect equipped!");
-
-}
-
-<script>
-
-/* your other functions above */
-
-function resetDailyQuests(){
-
-const today = new Date().toDateString();
-const savedDay = localStorage.getItem("questDay");
-
-if(savedDay !== today){
-
-quests = {
-q1:false,
-q2:false,
-q3:false
-};
-
-claimed = {
-q1:false,
-q2:false,
-q3:false
-};
-
-localStorage.setItem("questDay",today);
-localStorage.setItem(
-"claimedQuests",
-JSON.stringify(claimed)
-);
-
-}
-
-}
-
-/* more functions below */
-
-</script>
-
-/* PAGE */
-
-function showPage(page){
-
-document.getElementById("homePage").classList.add("hidden");
-document.getElementById("faqPage").classList.add("hidden");
-document.getElementById("tutorialPage").classList.add("hidden");
-document.getElementById("settingsPage").classList.add("hidden");
-
-if(page === "home"){
-document.getElementById("homePage").classList.remove("hidden");
-}
-
-if(page === "faq"){
-document.getElementById("faqPage").classList.remove("hidden");
-}
-
-if(page === "tutorial"){
-document.getElementById("tutorialPage").classList.remove("hidden");
-}
-
-if(page === "settings"){
-document.getElementById("settingsPage").classList.remove("hidden");
-}
-
-}
-
-/* QR */
-function setQRColor(color){
-
-currentColor = color;
-
-let usedColours =
-JSON.parse(localStorage.getItem("usedColours")) || [];
-
-if(!usedColours.includes(color)){
-
-usedColours.push(color);
-
-localStorage.setItem(
-"usedColours",
-JSON.stringify(usedColours)
-);
-
-}
-
-if(usedColours.length >= 3){
-completeQuest(2);
-}
-
-}
-
-function generateQR(){
-
-const url = document.getElementById("urlInput").value;
-
-if(url.trim() === ""){
-alert("Please enter a URL!");
-return;
-}
-
-completeQuest(1);
-
-
-currentURL = url;
-
-const qrContainer = document.getElementById("qrcode");
-
-qrContainer.innerHTML = "";
-
-new QRCode(qrContainer,{
-text:url,
-width:220,
-height:220,
-colorDark:currentColor,
-colorLight:"#ffffff"
-});
-
-setTimeout(() => {
-
-const canvas = qrContainer.querySelector("canvas");
-
-currentQRImage = canvas.toDataURL("image/png");
-
-document.getElementById("afterGenerate")
-.classList.remove("hidden");
-
-},500);
-
-}
-
-/* SAVE */
-
-function saveQR(){
-
-const name = document.getElementById("qrName").value;
-
-if(name.trim() === ""){
-alert("Please enter a QR code name!");
-return;
-}
-
-const creations =
-JSON.parse(localStorage.getItem("qrCreations")) || [];
-
-creations.push({
-name:name,
-image:currentQRImage,
-url:currentURL,
-color:currentColor,
-created:new Date().toLocaleString()
-});
-
-localStorage.setItem(
-"qrCreations",
-JSON.stringify(creations)
-);
-
-buyTheme()
-equipTheme()
-loadShop()
-
-loadCreations();
-
-resetDailyQuests();
-startQuestTimer();
-
-updateCoins();
-updateProgress();
-
-loadQuestData();
-loadShop();
-
-function startQuestTimer(){
-
-setInterval(()=>{
-
-const now = new Date();
-
-const tomorrow = new Date();
-
-tomorrow.setHours(24,0,0,0);
-
-const diff = tomorrow - now;
-
-const hours = Math.floor(diff / 1000 / 60 / 60);
-const minutes = Math.floor(diff / 1000 / 60 % 60);
-const seconds = Math.floor(diff / 1000 % 60);
-
-document.getElementById("questTimer")
-.innerText =
-`NEW QUESTS IN : ${hours}:${minutes}:${seconds}`;
-
-},1000);
-
-}
-
-completeQuest(3);
-
-alert("QR Code Saved!");
-
-}
-
-/* LOAD */
-
-function loadCreations(){
-
-const creationsDiv =
-document.getElementById("creations");
-
-creationsDiv.innerHTML = "";
-
-const creations =
-JSON.parse(localStorage.getItem("qrCreations")) || [];
-
-creations.forEach(item => {
-
-const card = document.createElement("div");
-
-card.className = "creation-card";
-
-card.innerHTML = `
-<img src="${item.image}">
-<div class="creation-name">${item.name}</div>
-`;
-
-card.onclick = () => openInfo(item);
-
-creationsDiv.appendChild(card);
-
-});
-
-}
-
-/* INFO */
-
-function openInfo(item){
-
-document.getElementById("modal").style.display = "flex";
-
-document.getElementById("modalBody").innerHTML = `
-
-<img src="${item.image}">
-
-<h2>${item.name}</h2>
-
-<p style="margin-top:15px;">
-<b>URL:</b> ${item.url}
-</p>
-
-<p style="margin-top:15px;">
-<b>Created:</b> ${item.created}
-</p>
-
-<div class="share-grid">
-
-<div class="share-btn"
-onclick='sharePlatform("whatsapp",${JSON.stringify(item)})'>
-<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-<span>WhatsApp</span>
-</div>
-
-<div class="share-btn"
-onclick='sharePlatform("linkedin",${JSON.stringify(item)})'>
-<img src="https://cdn-icons-png.flaticon.com/512/174/174857.png">
-<span>LinkedIn</span>
-</div>
-
-<div class="share-btn"
-onclick='sharePlatform("facebook",${JSON.stringify(item)})'>
-<img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
-<span>Facebook</span>
-</div>
-
-<div class="share-btn"
-onclick='sharePlatform("instagram",${JSON.stringify(item)})'>
-<img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
-<span>Instagram</span>
-</div>
-
-<div class="share-btn"
-onclick='sharePlatform("youtube",${JSON.stringify(item)})'>
-<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-<span>YouTube</span>
-</div>
-
-<div class="share-btn"
-onclick='sharePlatform("download",${JSON.stringify(item)})'>
-<img src="https://cdn-icons-png.flaticon.com/512/724/724933.png">
-<span>Download</span>
-</div>
-
-</div>
-
-`;
-
-}
-
-function closeModal(){
-document.getElementById("modal").style.display = "none";
-}
-
-/* SHARE */
-
-function sharePlatform(platform,item){
-
-const text =
-`Check out my QR Code!\n${item.url}\nhttps://quickqr-website.vercel.app`;
-
-if(platform === "whatsapp"){
-window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
-}
-
-if(platform === "linkedin"){
-window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(item.url)}`);
-}
-
-if(platform === "facebook"){
-window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(item.url)}`);
-}
-
-if(platform === "instagram"){
-alert("Download the image and upload it to Instagram.");
-}
-
-if(platform === "youtube"){
-alert("Download the image and upload it as a YouTube post.");
-}
-
-if(platform === "download"){
-
-const canvas = document.createElement("canvas");
-
-canvas.width = 800;
-canvas.height = 1000;
-
-const ctx = canvas.getContext("2d");
-
-const gradient = ctx.createLinearGradient(0,0,800,1000);
-
-gradient.addColorStop(0,item.color);
-gradient.addColorStop(1,"black");
-
-ctx.fillStyle = gradient;
-ctx.fillRect(0,0,800,1000);
-
-ctx.fillStyle = "white";
-ctx.textAlign = "center";
-
-ctx.font = "bold 45px Arial";
-ctx.fillText(item.name,400,100);
-
-ctx.font = "28px Arial";
-ctx.fillText(item.url,400,160);
-
-const qr = new Image();
-
-qr.src = item.image;
-
-qr.onload = () => {
-
-ctx.drawImage(qr,220,260,360,360);
-
-const a = document.createElement("a");
-
-a.href = canvas.toDataURL("image/png");
-
-a.download = item.name + ".png";
-
-a.click();
-
-};
-
-}
-
-}
-
-/* SETTINGS */
+/* =========================
+   SETTINGS
+========================= */
 
 function changeTheme(mode){
 
@@ -1332,8 +1326,11 @@ document.body.style.color = "white";
 
 function changeAccent(color){
 
-document.querySelectorAll("button").forEach(btn => {
+document.querySelectorAll("button")
+.forEach(btn=>{
+
 btn.style.background = color;
+
 });
 
 }
@@ -1355,15 +1352,19 @@ function exportQRData(){
 const data =
 localStorage.getItem("qrCreations");
 
-const blob = new Blob([data],{
+const blob =
+new Blob([data],{
 type:"application/json"
 });
 
-const a = document.createElement("a");
+const a =
+document.createElement("a");
 
-a.href = URL.createObjectURL(blob);
+a.href =
+URL.createObjectURL(blob);
 
-a.download = "quickqr-data.json";
+a.download =
+"quickqr-data.json";
 
 a.click();
 
@@ -1371,11 +1372,13 @@ a.click();
 
 function importQRData(event){
 
-const file = event.target.files[0];
+const file =
+event.target.files[0];
 
 if(!file) return;
 
-const reader = new FileReader();
+const reader =
+new FileReader();
 
 reader.onload = function(e){
 
@@ -1392,14 +1395,25 @@ reader.readAsText(file);
 
 }
 
-/* AI */
+/* =========================
+   AI ASSISTANT
+========================= */
 
-const aiButton = document.getElementById("aiButton");
-const aiChat = document.getElementById("aiChat");
-const aiMessages = document.getElementById("aiMessages");
-const aiInput = document.getElementById("aiInput");
+const aiButton =
+document.getElementById("aiButton");
 
-aiButton.onclick = () => {
+const aiChat =
+document.getElementById("aiChat");
+
+const aiMessages =
+document.getElementById("aiMessages");
+
+const aiInput =
+document.getElementById("aiInput");
+
+if(aiButton){
+
+aiButton.onclick = ()=>{
 
 if(aiChat.style.display === "flex"){
 aiChat.style.display = "none";
@@ -1409,55 +1423,54 @@ aiChat.style.display = "flex";
 
 };
 
+}
+
 function addMessage(text,type){
 
-const div = document.createElement("div");
+const div =
+document.createElement("div");
 
-div.className = `aiMsg ${type}`;
+div.className =
+`aiMsg ${type}`;
 
 div.innerText = text;
 
 aiMessages.appendChild(div);
 
-aiMessages.scrollTop = aiMessages.scrollHeight;
+aiMessages.scrollTop =
+aiMessages.scrollHeight;
 
 }
 
 function generateQuickQRAnswer(question){
 
-question = question.toLowerCase();
+question =
+question.toLowerCase();
 
-if(question.includes("generate")){
-return "Paste a URL and press Generate QR Code.";
+if(question.includes("quest")){
+return "Complete quests to earn QR Tokens.";
+}
+
+if(question.includes("shop")){
+return "Use QR Tokens to buy themes.";
 }
 
 if(question.includes("save")){
-return "Press Save QR Code after generating.";
+return "Press Save QR Code.";
 }
 
-if(question.includes("share")){
-return "Open a QR code from My Creations to share it.";
+if(question.includes("generate")){
+return "Paste a URL and press Generate.";
 }
 
-if(question.includes("download")){
-return "Use the Download button inside QR info.";
-}
-
-if(question.includes("settings")){
-return "Open Settings from the navbar.";
-}
-
-if(question.includes("colour")){
-return "Choose a colour before generating.";
-}
-
-return "Sorry! But I can't help you with unrelated questions.";
+return "Ask something related to QuickQR.";
 
 }
 
 function handleAI(){
 
-const text = aiInput.value.trim();
+const text =
+aiInput.value.trim();
 
 if(text === "") return;
 
@@ -1465,33 +1478,41 @@ addMessage(text,"user");
 
 aiInput.value = "";
 
-addMessage("Getting your answer...","bot");
-
-setTimeout(() => {
-
-aiMessages.lastChild.remove();
+setTimeout(()=>{
 
 const answer =
 generateQuickQRAnswer(text);
 
 addMessage(answer,"bot");
 
-},1200);
+},800);
 
 }
 
-document.getElementById("sendBtn")
-.onclick = handleAI;
+const sendBtn =
+document.getElementById("sendBtn");
 
-aiInput.addEventListener("keypress",(e)=>{
-if(e.key === "Enter"){
-handleAI();
+if(sendBtn){
+sendBtn.onclick = handleAI;
 }
-});
 
-/* START */
+/* =========================
+   STARTUP
+========================= */
 
 loadCreations();
+
+resetDailyQuests();
+
+startQuestTimer();
+
+updateCoins();
+
+updateProgress();
+
+loadQuestData();
+
+loadShop();
 
 </script>
 

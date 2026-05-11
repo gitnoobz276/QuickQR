@@ -647,141 +647,6 @@ Privacy
 
 </div>
 
-function resetDailyQuests(){
-
-const today = new Date().toDateString();
-
-const savedDay = localStorage.getItem("questDay");
-
-if(savedDay !== today){
-
-quests = {
-q1:false,
-q2:false,
-q3:false
-};
-
-claimed = {
-q1:false,
-q2:false,
-q3:false
-};
-
-localStorage.setItem("questDay",today);
-
-localStorage.setItem(
-"claimedQuests",
-JSON.stringify(claimed)
-);
-
-}
-
-}
-
-<div id="questsPage" class="hidden">
-
-<div class="card">
-
-<h1>Daily Quests</h1>
-
-<p id="questTimer">
-NEW QUESTS IN: 24:00:00
-</p>
-
-<div class="progress-bar">
-<div id="progressFill"></div>
-</div>
-
-<p id="progressText">
-0% Complete (0/3 quests)
-</p>
-
-<div class="quest-item">
-<h3>Create 1 QR Code</h3>
-<p>Reward: 2 QR Tokens</p>
-<button id="claim1" onclick="claimQuest(1)">
-Claim
-</button>
-</div>
-
-<div class="quest-item">
-<h3>Try 3 Colours</h3>
-<p>Reward: 2 QR Tokens</p>
-<button id="claim2" onclick="claimQuest(2)">
-Claim
-</button>
-</div>
-
-<div class="quest-item">
-<h3>Save 1 QR Code</h3>
-<p>Reward: 2 QR Tokens</p>
-<button id="claim3" onclick="claimQuest(3)">
-Claim
-</button>
-</div>
-
-</div>
-
-</div>
-
-<div id="shopPage" class="hidden">
-
-<div class="card">
-
-<h1>Theme Shop</h1>
-
-<div class="shop-grid">
-
-<div class="shop-item">
-<h3>Neon Theme</h3>
-<p>10 Tokens</p>
-<button onclick="buyItem('neon',10)">
-Buy
-</button>
-<button onclick="equipTheme('neon')">
-Equip
-</button>
-</div>
-
-<div class="shop-item">
-<h3>Galaxy Gradient</h3>
-<p>8 Tokens</p>
-<button onclick="buyItem('galaxy',8)">
-Buy
-</button>
-<button onclick="equipGradient('galaxy')">
-Equip
-</button>
-</div>
-
-<div class="shop-item">
-<h3>Golden Frame</h3>
-<p>12 Tokens</p>
-<button onclick="buyItem('goldFrame',12)">
-Buy
-</button>
-<button onclick="equipFrame('goldFrame')">
-Equip
-</button>
-</div>
-
-<div class="shop-item">
-<h3>Glow Effect</h3>
-<p>6 Tokens</p>
-<button onclick="buyItem('glow',6)">
-Buy
-</button>
-<button onclick="equipEffect('glow')">
-Equip
-</button>
-</div>
-
-</div>
-
-</div>
-
-</div>/style
-
 <!-- MODAL -->
 
 <div id="modal" class="modal">
@@ -862,6 +727,83 @@ quests[`q${id}`] = true;
 updateProgress();
 
 }
+
+function resetDailyQuests(){
+
+const today = new Date().toDateString();
+
+const savedDay = localStorage.getItem("questDay");
+
+if(savedDay !== today){
+
+quests = {
+q1:false,
+q2:false,
+q3:false
+};
+
+claimed = {
+q1:false,
+q2:false,
+q3:false
+};
+
+localStorage.setItem("questDay",today);
+
+localStorage.setItem(
+"claimedQuests",
+JSON.stringify(claimed)
+);
+
+}
+
+}
+
+<div id="questsPage" class="hidden">
+
+<div class="card">
+
+<h1>Daily Quests</h1>
+
+<p id="questTimer">
+NEW QUESTS IN: 24:00:00
+</p>
+
+<div class="progress-bar">
+<div id="progressFill"></div>
+</div>
+
+<p id="progressText">
+0% Complete (0/3 quests)
+</p>
+
+<div class="quest-item">
+<h3>Create 1 QR Code</h3>
+<p>Reward: 2 QR Tokens</p>
+<button id="claim1" onclick="claimQuest(1)">
+Claim
+</button>
+</div>
+
+<div class="quest-item">
+<h3>Try 3 Colours</h3>
+<p>Reward: 2 QR Tokens</p>
+<button id="claim2" onclick="claimQuest(2)">
+Claim
+</button>
+</div>
+
+<div class="quest-item">
+<h3>Save 1 QR Code</h3>
+<p>Reward: 2 QR Tokens</p>
+<button id="claim3" onclick="claimQuest(3)">
+Claim
+</button>
+</div>
+
+</div>
+
+</div>
 
 function claimQuest(id){
 
@@ -991,6 +933,43 @@ localStorage.setItem("equippedEffect",effect);
 alert("Effect equipped!");
 
 }
+
+<script>
+
+/* your other functions above */
+
+function resetDailyQuests(){
+
+const today = new Date().toDateString();
+const savedDay = localStorage.getItem("questDay");
+
+if(savedDay !== today){
+
+quests = {
+q1:false,
+q2:false,
+q3:false
+};
+
+claimed = {
+q1:false,
+q2:false,
+q3:false
+};
+
+localStorage.setItem("questDay",today);
+localStorage.setItem(
+"claimedQuests",
+JSON.stringify(claimed)
+);
+
+}
+
+}
+
+/* more functions below */
+
+</script>
 
 /* PAGE */
 

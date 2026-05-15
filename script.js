@@ -2,15 +2,25 @@
    VARIABLES
 ========================= */
 
-let currentColor = "black";
+let currentColor = "#000000";
 let currentQRImage = "";
 let currentURL = "";
 
 let qrCoins =
 parseInt(localStorage.getItem("qrCoins")) || 0;
 
-let ownedItems =
-JSON.parse(localStorage.getItem("ownedItems")) || [];
+let usedColours =
+JSON.parse(localStorage.getItem("usedColours")) || [];
+
+let ownedThemes =
+JSON.parse(localStorage.getItem("ownedThemes")) || [];
+
+let enabledTheme =
+localStorage.getItem("enabledTheme") || "default";
+
+/* =========================
+   QUEST SYSTEM
+========================= */
 
 const possibleQuests = [
 
@@ -54,279 +64,7 @@ let claimedQuests =
 JSON.parse(localStorage.getItem("claimedQuests")) || {};
 
 /* =========================
-   MOBILE MENU
-========================= */
-
-function toggleMenu(){
-
-document.querySelector(".nav-links")
-.classList.toggle("active");
-
-}
-
-/* =========================
-   PAGE SYSTEM
-========================= */
-
-function showPage(page){
-
-const pages = [
-
-"homePage",
-"faqPage",
-"tutorialPage",
-"settingsPage",
-"questsPage",
-"shopPage"
-
-];
-
-pages.forEach(id=>{
-
-const pageEl =
-document.getElementById(id);
-
-if(pageEl){
-pageEl.classList.add("hidden");
-}
-
-});
-
-if(page === "home"){
-document.getElementById("homePage")
-.classList.remove("hidden");
-}
-
-if(page === "faq"){
-
-document.getElementById("faqPage")
-.classList.remove("hidden");
-
-updateQuest("faq");
-
-}
-
-if(page === "tutorial"){
-document.getElementById("tutorialPage")
-.classList.remove("hidden");
-}
-
-if(page === "settings"){
-document.getElementById("settingsPage")
-.classList.remove("hidden");
-}
-
-if(page === "quests"){
-document.getElementById("questsPage")
-.classList.remove("hidden");
-}
-
-if(page === "shop"){
-document.getElementById("shopPage")
-.classList.remove("hidden");
-}
-
-}
-
-/* =========================
-   QR COLOUR
-========================= */
-
-function setQRColor(color){
-
-currentColor = color;
-
-updateQuest("colour");
-
-}
-
-/* =========================
-   GENERATE QR
-========================= */
-
-function generateQR(){
-
-const url =
-document.getElementById("urlInput").value;
-
-if(url.trim() === ""){
-alert("Please enter a URL.");
-return;
-}
-
-currentURL = url;
-
-const qrContainer =
-document.getElementById("qrcode");
-
-qrContainer.innerHTML = "";
-
-new QRCode(qrContainer,{
-
-text:url,
-width:220,
-height:220,
-colorDark:currentColor,
-colorLight:"#ffffff"
-
-});
-
-setTimeout(()=>{
-
-const canvas =
-qrContainer.querySelector("canvas");
-
-if(!canvas) return;
-
-currentQRImage =
-canvas.toDataURL("image/png");
-
-document.getElementById("afterGenerate")
-.classList.remove("hidden");
-
-updateQuest("generate");
-
-},500);
-
-}
-
-/* =========================
-   SAVE QR
-========================= */
-
-function saveQR(){
-
-const name =
-document.getElementById("qrName").value;
-
-if(name.trim() === ""){
-alert("Enter a QR name.");
-return;
-}
-
-const creations =
-JSON.parse(localStorage.getItem("qrCreations")) || [];
-
-creations.push({
-
-name:name,
-image:currentQRImage,
-url:currentURL,
-created:new Date().toLocaleString()
-
-});
-
-localStorage.setItem(
-"qrCreations",
-JSON.stringify(creations)
-);
-
-loadCreations();
-
-updateQuest("save");
-
-alert("QR Code Saved!");
-
-}
-
-/* =========================
-   LOAD CREATIONS
-========================= */
-
-function loadCreations(){
-
-const creationsDiv =
-document.getElementById("creations");
-
-if(!creationsDiv) return;
-
-creationsDiv.innerHTML = "";
-
-const creations =
-JSON.parse(localStorage.getItem("qrCreations")) || [];
-
-creations.forEach(item=>{
-
-const card =
-document.createElement("div");
-
-card.className = "creation-card";
-
-card.innerHTML = `
-
-<img src="${item.image}">
-
-<div class="creation-name">
-${item.name}
-</div>
-
-`;
-
-card.onclick = ()=>openInfo(item);
-
-creationsDiv.appendChild(card);
-
-});
-
-}
-
-/* =========================
-   MODAL
-========================= */
-
-function openInfo(item){
-
-document.getElementById("modal")
-.style.display = "flex";
-
-document.getElementById("modalBody")
-.innerHTML = `
-
-<img src="${item.image}">
-
-<h2>${item.name}</h2>
-
-<p style="margin-top:15px;">
-<b>URL:</b> ${item.url}
-</p>
-
-<p style="margin-top:15px;">
-<b>Created:</b> ${item.created}
-</p>
-
-`;
-
-}
-
-function closeModal(){
-
-document.getElementById("modal")
-.style.display = "none";
-
-}
-
-/* =========================
-   COINS
-========================= */
-
-function updateCoins(){
-
-localStorage.setItem(
-"qrCoins",
-qrCoins
-);
-
-const counter =
-document.getElementById("coinAmount");
-
-if(counter){
-counter.innerText = qrCoins;
-}
-
-}
-
-/* =========================
-   QUESTS
+   GENERATE DAILY QUESTS
 ========================= */
 
 function generateDailyQuests(){
@@ -341,14 +79,17 @@ if(savedDate === today) return;
 
 dailyQuests = [];
 
-for(let i=0;i<3;i++){
+for(let i = 0; i < 3; i++){
 
-const random =
+const randomQuest =
 possibleQuests[
-Math.floor(Math.random()*possibleQuests.length)
+Math.floor(
+Math.random() *
+possibleQuests.length
+)
 ];
 
-dailyQuests.push(random);
+dailyQuests.push(randomQuest);
 
 }
 
@@ -376,6 +117,10 @@ today
 );
 
 }
+
+/* =========================
+   LOAD QUESTS
+========================= */
 
 function loadQuests(){
 
@@ -429,16 +174,24 @@ updateQuestBar();
 
 }
 
+/* =========================
+   UPDATE QUEST
+========================= */
+
 function updateQuest(type){
 
 dailyQuests.forEach((quest,index)=>{
 
 if(quest.type === type){
 
-if((questProgress[index] || 0) < quest.goal){
+if(
+(questProgress[index] || 0)
+< quest.goal
+){
 
 questProgress[index] =
-(questProgress[index] || 0) + 1;
+(questProgress[index] || 0)
++ 1;
 
 }
 
@@ -455,14 +208,26 @@ loadQuests();
 
 }
 
+/* =========================
+   CLAIM QUEST
+========================= */
+
 function claimQuest(index){
 
 const quest =
 dailyQuests[index];
 
-if(claimedQuests[index]) return;
+if(claimedQuests[index]){
 
-if((questProgress[index] || 0) < quest.goal){
+alert("Already claimed.");
+return;
+
+}
+
+if(
+(questProgress[index] || 0)
+< quest.goal
+){
 
 alert("Quest not complete.");
 return;
@@ -484,6 +249,10 @@ loadQuests();
 
 }
 
+/* =========================
+   QUEST BAR
+========================= */
+
 function updateQuestBar(){
 
 let completed = 0;
@@ -497,16 +266,32 @@ completed++;
 });
 
 const percent =
-(completed / dailyQuests.length) * 100;
+(completed / dailyQuests.length)
+* 100;
 
-document.getElementById("progressFill")
-.style.width = percent + "%";
+const fill =
+document.getElementById("progressFill");
 
-document.getElementById("progressText")
-.innerText =
+if(fill){
+fill.style.width =
+percent + "%";
+}
+
+const text =
+document.getElementById("progressText");
+
+if(text){
+
+text.innerText =
 `${completed}/${dailyQuests.length} Complete`;
 
 }
+
+}
+
+/* =========================
+   QUEST TIMER
+========================= */
 
 function startQuestTimer(){
 
@@ -529,44 +314,322 @@ Math.floor(diff / 1000 / 60 % 60);
 const seconds =
 Math.floor(diff / 1000 % 60);
 
-document.getElementById("questTimer")
-.innerText =
+const timer =
+document.getElementById("questTimer");
 
+if(timer){
+
+timer.innerText =
 `NEW QUESTS IN:
 ${hours}:${minutes}:${seconds}`;
+
+}
 
 },1000);
 
 }
 
 /* =========================
-   SHOP
+   PAGE SYSTEM
 ========================= */
 
-function buyItem(item,cost){
+function showPage(page){
 
-if(ownedItems.includes(item)){
-alert("Already purchased.");
-return;
+const pages = [
+
+"homePage",
+"faqPage",
+"tutorialPage",
+"settingsPage",
+"questsPage",
+"shopPage"
+
+];
+
+pages.forEach(id=>{
+
+const el =
+document.getElementById(id);
+
+if(el){
+el.classList.add("hidden");
 }
 
-if(qrCoins < cost){
-alert("Not enough QR Tokens.");
-return;
-}
+});
 
-qrCoins -= cost;
-
-ownedItems.push(item);
-
-localStorage.setItem(
-"ownedItems",
-JSON.stringify(ownedItems)
+const target =
+document.getElementById(
+page + "Page"
 );
 
-updateCoins();
+if(target){
+target.classList.remove("hidden");
+}
 
-alert("Purchased!");
+if(page === "faq"){
+updateQuest("faq");
+}
+
+/* close mobile menu */
+
+const nav =
+document.getElementById("navLinks");
+
+if(window.innerWidth <= 700){
+
+if(nav){
+nav.classList.remove("show");
+}
+
+}
+
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+function toggleMenu(){
+
+const nav =
+document.getElementById("navLinks");
+
+if(nav){
+
+nav.classList.toggle("show");
+
+}
+
+}
+
+/* =========================
+   QR COLOR
+========================= */
+
+function setQRColor(color){
+
+currentColor = color;
+
+if(!usedColours.includes(color)){
+
+usedColours.push(color);
+
+localStorage.setItem(
+"usedColours",
+JSON.stringify(usedColours)
+);
+
+}
+
+if(usedColours.length >= 3){
+
+updateQuest("colour");
+
+}
+
+}
+
+/* =========================
+   GENERATE QR
+========================= */
+
+function generateQR(){
+
+const url =
+document.getElementById("urlInput")
+.value;
+
+if(url.trim() === ""){
+
+alert("Enter a URL.");
+return;
+
+}
+
+currentURL = url;
+
+const qr =
+document.getElementById("qrcode");
+
+qr.innerHTML = "";
+
+new QRCode(qr,{
+
+text:url,
+width:220,
+height:220,
+colorDark:currentColor,
+colorLight:"#ffffff"
+
+});
+
+setTimeout(()=>{
+
+const canvas =
+qr.querySelector("canvas");
+
+if(!canvas) return;
+
+currentQRImage =
+canvas.toDataURL("image/png");
+
+document.getElementById(
+"afterGenerate"
+).classList.remove("hidden");
+
+updateQuest("generate");
+
+},500);
+
+}
+
+/* =========================
+   SAVE QR
+========================= */
+
+function saveQR(){
+
+const name =
+document.getElementById("qrName")
+.value;
+
+if(name.trim() === ""){
+
+alert("Enter a QR name.");
+return;
+
+}
+
+const creations =
+JSON.parse(
+localStorage.getItem("qrCreations")
+) || [];
+
+creations.push({
+
+name:name,
+image:currentQRImage,
+url:currentURL,
+color:currentColor,
+created:new Date().toLocaleString()
+
+});
+
+localStorage.setItem(
+"qrCreations",
+JSON.stringify(creations)
+);
+
+loadCreations();
+
+updateQuest("save");
+
+alert("QR Code Saved!");
+
+}
+
+/* =========================
+   LOAD CREATIONS
+========================= */
+
+function loadCreations(){
+
+const container =
+document.getElementById("creations");
+
+if(!container) return;
+
+container.innerHTML = "";
+
+const creations =
+JSON.parse(
+localStorage.getItem("qrCreations")
+) || [];
+
+creations.forEach(item=>{
+
+const card =
+document.createElement("div");
+
+card.className =
+"creation-card";
+
+card.innerHTML = `
+
+<img src="${item.image}">
+
+<div class="creation-name">
+${item.name}
+</div>
+
+`;
+
+card.onclick = ()=>{
+
+openInfo(item);
+
+};
+
+container.appendChild(card);
+
+});
+
+}
+
+/* =========================
+   OPEN INFO
+========================= */
+
+function openInfo(item){
+
+document.getElementById("modal")
+.style.display = "flex";
+
+document.getElementById("modalBody")
+.innerHTML = `
+
+<img src="${item.image}">
+
+<h2>${item.name}</h2>
+
+<p style="margin-top:15px;">
+<b>URL:</b> ${item.url}
+</p>
+
+<p style="margin-top:15px;">
+<b>Created:</b> ${item.created}
+</p>
+
+`;
+
+}
+
+function closeModal(){
+
+document.getElementById("modal")
+.style.display = "none";
+
+}
+
+/* =========================
+   COINS
+========================= */
+
+function updateCoins(){
+
+localStorage.setItem(
+"qrCoins",
+qrCoins
+);
+
+const amount =
+document.getElementById("coinAmount");
+
+if(amount){
+
+amount.innerText = qrCoins;
+
+}
 
 }
 
@@ -576,38 +639,21 @@ alert("Purchased!");
 
 function changeTheme(mode){
 
-const cards =
-document.querySelectorAll(".card");
-
 if(mode === "light"){
 
 document.body.style.background =
 "linear-gradient(135deg,#f1f5f9,#cbd5e1)";
 
-document.body.style.color = "black";
-
-cards.forEach(card=>{
-
-card.style.background = "white";
-card.style.color = "black";
-
-});
+document.body.style.color =
+"black";
 
 }else{
 
 document.body.style.background =
 "linear-gradient(135deg,#0f172a,#1e293b)";
 
-document.body.style.color = "white";
-
-cards.forEach(card=>{
-
-card.style.background =
-"rgba(255,255,255,0.08)";
-
-card.style.color = "white";
-
-});
+document.body.style.color =
+"white";
 
 }
 
@@ -622,22 +668,216 @@ btn.style.background = color;
 
 });
 
-document.getElementById("progressFill")
-.style.background = color;
-
 }
 
 function clearQRData(){
 
 if(confirm("Delete all QR codes?")){
 
-localStorage.removeItem("qrCreations");
+localStorage.removeItem(
+"qrCreations"
+);
 
 loadCreations();
 
 }
 
 }
+
+/* =========================
+   THEME SHOP
+========================= */
+
+function buyTheme(theme,cost){
+
+if(ownedThemes.includes(theme)){
+
+alert("Already owned.");
+return;
+
+}
+
+if(qrCoins < cost){
+
+alert("Not enough QR Tokens.");
+return;
+
+}
+
+qrCoins -= cost;
+
+ownedThemes.push(theme);
+
+localStorage.setItem(
+"ownedThemes",
+JSON.stringify(ownedThemes)
+);
+
+updateCoins();
+
+alert("Theme purchased!");
+
+loadThemeShop();
+
+}
+
+function enableTheme(theme){
+
+if(!ownedThemes.includes(theme)){
+
+alert("Buy it first.");
+return;
+
+}
+
+enabledTheme = theme;
+
+localStorage.setItem(
+"enabledTheme",
+theme
+);
+
+applyTheme();
+
+loadThemeShop();
+
+}
+
+function disableTheme(){
+
+enabledTheme = "default";
+
+localStorage.setItem(
+"enabledTheme",
+"default"
+);
+
+applyTheme();
+
+loadThemeShop();
+
+}
+
+function applyTheme(){
+
+if(enabledTheme === "neon"){
+
+document.body.style.background =
+"linear-gradient(135deg,#00ffff,#0f172a)";
+
+}
+
+else if(enabledTheme === "sunset"){
+
+document.body.style.background =
+"linear-gradient(135deg,#ff512f,#dd2476)";
+
+}
+
+else if(enabledTheme === "forest"){
+
+document.body.style.background =
+"linear-gradient(135deg,#134e5e,#71b280)";
+
+}
+
+else{
+
+document.body.style.background =
+"linear-gradient(135deg,#0f172a,#1e293b)";
+
+}
+
+}
+
+function loadThemeShop(){
+
+const container =
+document.getElementById("shopContainer");
+
+if(!container) return;
+
+container.innerHTML = "";
+
+const themes = [
+
+{
+name:"neon",
+cost:30
+},
+
+{
+name:"sunset",
+cost:30
+},
+
+{
+name:"forest",
+cost:30
+},
+
+{
+name:"galaxy",
+cost:30
+}
+
+];
+
+themes.forEach(theme=>{
+
+const owned =
+ownedThemes.includes(theme.name);
+
+const active =
+enabledTheme === theme.name;
+
+const div =
+document.createElement("div");
+
+div.className = "shop-item";
+
+div.innerHTML = `
+
+<h3>${theme.name}</h3>
+
+<p>
+${theme.cost} QR Tokens
+</p>
+
+${
+owned ?
+
+active ?
+
+`<button onclick="disableTheme()">
+Disable
+</button>`
+
+:
+
+`<button onclick="enableTheme('${theme.name}')">
+Enable
+</button>`
+
+:
+
+`<button onclick="buyTheme('${theme.name}',${theme.cost})">
+Buy
+</button>`
+
+}
+
+`;
+
+container.appendChild(div);
+
+});
+
+}
+
+/* =========================
+   EXPORT / IMPORT
+========================= */
 
 function exportQRData(){
 
@@ -646,7 +886,9 @@ localStorage.getItem("qrCreations");
 
 const blob =
 new Blob([data],{
+
 type:"application/json"
+
 });
 
 const a =
@@ -703,14 +945,21 @@ document.getElementById("aiMessages");
 const aiInput =
 document.getElementById("aiInput");
 
+const sendBtn =
+document.getElementById("sendBtn");
+
 if(aiButton){
 
 aiButton.onclick = ()=>{
 
 if(aiChat.style.display === "flex"){
+
 aiChat.style.display = "none";
+
 }else{
+
 aiChat.style.display = "flex";
+
 }
 
 };
@@ -734,64 +983,107 @@ aiMessages.scrollHeight;
 
 }
 
-async function generateQuickQRAnswer(question){
+function generateQuickQRAnswer(question){
 
-question = question.toLowerCase();
+question =
+question.toLowerCase();
 
-if(question.includes("generate")){
+if(
+question.includes("generate")
+){
 
-return `
-To generate a QR code:
-
-1. Enter a URL
-2. Pick a colour
-3. Press Generate QR Code
-`;
+return
+"Paste a URL into the textbox and press Generate QR Code.";
 
 }
 
-if(question.includes("save")){
+if(
+question.includes("save")
+){
 
-return `
-Generate a QR first, then enter a QR name and press Save QR Code.
-`;
-
-}
-
-if(question.includes("quest")){
-
-return `
-Complete daily quests to earn QR Tokens.
-`;
+return
+"After generating your QR code, type a name and press Save QR Code.";
 
 }
 
-if(question.includes("theme")){
+if(
+question.includes("quest")
+){
 
-return `
-Themes can be bought in the Theme Shop using QR Tokens.
-`;
-
-}
-
-if(question.includes("settings")){
-
-return `
-Settings let you change themes, colours, export data, and clear QR codes.
-`;
+return
+"Complete quests to earn QR Tokens.";
 
 }
 
-return `
-I can help with:
+if(
+question.includes("theme")
+){
 
-• QR generation
-• Saving QR codes
-• Themes
-• Quests
-• Tokens
-• Settings
-`;
+return
+"Open the Theme Shop to buy and enable themes.";
+
+}
+
+if(
+question.includes("faq")
+){
+
+return
+"FAQ contains answers to common QuickQR questions.";
+
+}
+
+if(
+question.includes("tutorial")
+){
+
+return
+"Open Tutorial in the navbar to watch the QuickQR guide video.";
+
+}
+
+if(
+question.includes("token")
+||
+question.includes("coin")
+){
+
+return
+"You earn QR Tokens by completing quests.";
+
+}
+
+if(
+question.includes("colour")
+||
+question.includes("color")
+){
+
+return
+"Click one of the colour circles before generating a QR code.";
+
+}
+
+if(
+question.includes("download")
+){
+
+return
+"Open a saved QR code and screenshot it or save it.";
+
+}
+
+if(
+question.includes("settings")
+){
+
+return
+"You can change themes, accent colours, import/export QR data and clear saved QR codes.";
+
+}
+
+return
+"I can only answer questions related to QuickQR features.";
 
 }
 
@@ -806,34 +1098,54 @@ addMessage(text,"user");
 
 aiInput.value = "";
 
-setTimeout(async()=>{
+setTimeout(()=>{
 
 const answer =
-await generateQuickQRAnswer(text);
+generateQuickQRAnswer(text);
 
 addMessage(answer,"bot");
 
-},500);
+},700);
 
 }
 
-const sendBtn =
-document.getElementById("sendBtn");
-
 if(sendBtn){
+
 sendBtn.onclick = handleAI;
+
+}
+
+if(aiInput){
+
+aiInput.addEventListener(
+"keypress",
+function(e){
+
+if(e.key === "Enter"){
+
+handleAI();
+
+}
+
+}
+);
+
 }
 
 /* =========================
    STARTUP
 ========================= */
 
-loadCreations();
-
 generateDailyQuests();
 
 loadQuests();
 
-startQuestTimer();
+loadCreations();
+
+loadThemeShop();
 
 updateCoins();
+
+startQuestTimer();
+
+applyTheme();

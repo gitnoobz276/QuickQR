@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -25,7 +26,6 @@ color:white;
 min-height:100vh;
 padding:20px;
 overflow-x:hidden;
-transition:0.3s;
 }
 
 .hidden{
@@ -47,13 +47,22 @@ padding:20px;
 background:rgba(255,255,255,0.08);
 border-radius:25px;
 margin-bottom:30px;
-flex-wrap:wrap;
 gap:20px;
+flex-wrap:wrap;
 }
 
 .logo{
 font-size:2rem;
 font-weight:bold;
+}
+
+#coinDisplay{
+display:flex;
+align-items:center;
+gap:12px;
+background:rgba(255,255,255,0.08);
+padding:10px 16px;
+border-radius:18px;
 }
 
 .nav-links{
@@ -72,33 +81,16 @@ font-weight:bold;
 cursor:pointer;
 }
 
-/* MOBILE */
-
 #menuToggle{
 display:none;
 font-size:2rem;
 cursor:pointer;
+padding:10px 15px;
+border-radius:12px;
+background:#3b82f6;
 }
 
-@media(max-width:700px){
-
-#menuToggle{
-display:block;
-}
-
-.nav-links{
-display:none;
-flex-direction:column;
-width:100%;
-}
-
-.nav-links.show{
-display:flex;
-}
-
-}
-
-/* CARDS */
+/* CARD */
 
 .card{
 background:rgba(255,255,255,0.08);
@@ -107,7 +99,7 @@ border-radius:25px;
 margin-bottom:30px;
 }
 
-/* INPUTS */
+/* INPUT */
 
 input{
 width:100%;
@@ -128,22 +120,23 @@ padding:14px 22px;
 border-radius:15px;
 cursor:pointer;
 font-size:1rem;
-transition:0.3s;
 }
 
-button:hover{
-transform:scale(1.03);
-}
+/* QR */
 
-/* PALETTE */
+#qrcode{
+display:flex;
+justify-content:center;
+margin-top:30px;
+}
 
 .palette{
 display:flex;
-justify-content:center;
 gap:15px;
-flex-wrap:wrap;
+justify-content:center;
 margin-top:20px;
 margin-bottom:20px;
+flex-wrap:wrap;
 }
 
 .color{
@@ -155,34 +148,11 @@ cursor:pointer;
 }
 
 .red{background:red;}
+.blue{background:blue;}
+.green{background:green;}
+.black{background:black;}
 .orange{background:orange;}
 .yellow{background:yellow;}
-.green{background:green;}
-.blue{background:blue;}
-.black{background:black;}
-
-.note{
-text-align:center;
-margin-top:20px;
-margin-bottom:20px;
-color:#93c5fd;
-}
-
-/* QR */
-
-#qrcode{
-display:flex;
-justify-content:center;
-margin-top:30px;
-}
-
-.message{
-text-align:center;
-margin-top:20px;
-color:#93c5fd;
-}
-
-/* CREATIONS */
 
 .creation-grid{
 display:grid;
@@ -206,10 +176,45 @@ padding:10px;
 border-radius:12px;
 }
 
-.creation-name{
-margin-top:15px;
-font-size:1.1rem;
-font-weight:bold;
+/* QUESTS */
+
+.progress-bar{
+width:100%;
+height:25px;
+background:#111827;
+border-radius:20px;
+overflow:hidden;
+margin-top:20px;
+}
+
+#progressFill{
+height:100%;
+width:0%;
+background:#3b82f6;
+transition:0.3s;
+}
+
+.quest-item{
+margin-top:20px;
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,0.06);
+}
+
+/* SHOP */
+
+.shop-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.shop-item{
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,0.06);
+text-align:center;
 }
 
 /* MODAL */
@@ -229,8 +234,8 @@ z-index:9999;
 background:#1e293b;
 padding:30px;
 border-radius:25px;
-width:100%;
 max-width:700px;
+width:100%;
 text-align:center;
 }
 
@@ -240,56 +245,6 @@ background:white;
 padding:10px;
 border-radius:15px;
 margin-bottom:20px;
-}
-
-/* QUESTS */
-
-.quest-item{
-margin-top:25px;
-padding:20px;
-border-radius:20px;
-background:rgba(255,255,255,0.06);
-}
-
-.progress-bar{
-width:100%;
-height:25px;
-background:#111827;
-border-radius:20px;
-overflow:hidden;
-margin-top:20px;
-}
-
-#progressFill{
-height:100%;
-width:0%;
-background:#3b82f6;
-transition:0.3s;
-}
-
-/* SHOP */
-
-.shop-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin-top:20px;
-}
-
-.shop-item{
-padding:20px;
-border-radius:20px;
-background:rgba(255,255,255,0.06);
-text-align:center;
-}
-
-/* SETTINGS */
-
-.setting-item{
-background:rgba(255,255,255,0.06);
-padding:20px;
-border-radius:15px;
-margin-top:20px;
 }
 
 /* AI */
@@ -302,6 +257,7 @@ width:70px;
 height:70px;
 border-radius:50%;
 background:#111827;
+border:3px solid #3b82f6;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -320,21 +276,22 @@ object-fit:cover;
 position:fixed;
 right:20px;
 bottom:110px;
-width:320px;
-height:450px;
+width:340px;
+height:500px;
 background:#0f172a;
-border-radius:20px;
+border-radius:25px;
+overflow:hidden;
 display:none;
 flex-direction:column;
-overflow:hidden;
 z-index:9999;
+border:1px solid rgba(255,255,255,0.15);
 }
 
 #aiHeader{
-padding:15px;
+padding:18px;
 background:#111827;
-text-align:center;
 font-weight:bold;
+text-align:center;
 }
 
 #aiMessages{
@@ -343,13 +300,14 @@ overflow-y:auto;
 padding:15px;
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:12px;
 }
 
 .aiMsg{
-padding:10px;
-border-radius:15px;
-max-width:80%;
+padding:12px 15px;
+border-radius:18px;
+max-width:85%;
+line-height:1.5;
 }
 
 .user{
@@ -364,18 +322,52 @@ background:#1e293b;
 
 #aiInputArea{
 display:flex;
-padding:10px;
+padding:12px;
 gap:10px;
 background:#111827;
 }
 
 #aiInput{
 margin:0;
+background:#1e293b;
+color:white;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+#menuToggle{
+display:block;
+}
+
+.nav-links{
+display:none;
+flex-direction:column;
+width:100%;
+gap:10px;
+margin-top:15px;
+}
+
+.nav-links.active{
+display:flex;
+}
+
+.nav-links button{
+width:100%;
+}
+
+#aiChat{
+width:95%;
+right:2.5%;
+height:75vh;
+}
+
 }
 
 </style>
-</head>
 
+</head>
 <body>
 
 <div class="container">
@@ -388,7 +380,31 @@ margin:0;
 QuickQR
 </div>
 
-<div id="menuToggle">
+<div id="coinDisplay">
+
+<img
+src="https://cdn-icons-png.flaticon.com/512/272/272525.png"
+width="28"
+height="28"
+style="border-radius:50%;background:white;padding:4px;"
+>
+
+<div>
+
+<div style="font-size:0.8rem;color:#93c5fd;">
+QR Tokens
+</div>
+
+<div id="coinAmount"
+style="font-size:1.2rem;font-weight:bold;">
+0
+</div>
+
+</div>
+
+</div>
+
+<div id="menuToggle" onclick="toggleMenu()">
 ☰
 </div>
 
@@ -428,7 +444,7 @@ Theme Shop
 
 <div class="card">
 
-<h2>Enter Your Website URL</h2>
+<h2>Generate QR Code</h2>
 
 <input
 type="text"
@@ -436,18 +452,25 @@ id="urlInput"
 placeholder="https://example.com"
 >
 
-<p class="note">
-Choose a colour before generating your QR code.
-</p>
-
 <div class="palette">
 
-<div class="color red" onclick="setQRColor('red')"></div>
-<div class="color orange" onclick="setQRColor('orange')"></div>
-<div class="color yellow" onclick="setQRColor('yellow')"></div>
-<div class="color green" onclick="setQRColor('green')"></div>
-<div class="color blue" onclick="setQRColor('blue')"></div>
-<div class="color black" onclick="setQRColor('black')"></div>
+<div class="color red"
+onclick="setQRColor('red')"></div>
+
+<div class="color blue"
+onclick="setQRColor('blue')"></div>
+
+<div class="color green"
+onclick="setQRColor('green')"></div>
+
+<div class="color orange"
+onclick="setQRColor('orange')"></div>
+
+<div class="color yellow"
+onclick="setQRColor('yellow')"></div>
+
+<div class="color black"
+onclick="setQRColor('black')"></div>
 
 </div>
 
@@ -458,10 +481,6 @@ Generate QR Code
 <div id="qrcode"></div>
 
 <div id="afterGenerate" class="hidden">
-
-<p class="message">
-Save your QR code below.
-</p>
 
 <input
 type="text"
@@ -481,7 +500,9 @@ Save QR Code
 
 <h2>My Creations</h2>
 
-<div id="creations" class="creation-grid"></div>
+<div id="creations"
+class="creation-grid">
+</div>
 
 </div>
 
@@ -497,23 +518,16 @@ Save QR Code
 
 <br>
 
-<h3>How do I generate a QR code?</h3>
+<h3>Do QR Codes Save?</h3>
 <p>
-Paste your website URL and press Generate QR Code.
+Yes. QR codes autosave in your browser.
 </p>
 
 <br><br>
 
-<h3>Do QR codes save automatically?</h3>
+<h3>Is QuickQR Free?</h3>
 <p>
-Yes. Your QR codes save in your browser storage.
-</p>
-
-<br><br>
-
-<h3>How do I earn QR Tokens?</h3>
-<p>
-Complete daily quests and claim rewards.
+Yes. Everything is completely free.
 </p>
 
 </div>
@@ -547,58 +561,43 @@ style="border:none;border-radius:20px;">
 
 <h1>Settings</h1>
 
-<div class="setting-item">
-
-<h3>Theme</h3>
+<br>
 
 <select onchange="changeTheme(this.value)">
 
 <option value="dark">
-Dark
+Dark Theme
 </option>
 
 <option value="light">
-Light
+Light Theme
 </option>
 
 </select>
 
-</div>
-
-<div class="setting-item">
-
-<h3>Accent Colour</h3>
+<br><br>
 
 <select onchange="changeAccent(this.value)">
 
-<option value="#3b82f6">Blue</option>
-<option value="#22c55e">Green</option>
-<option value="#ef4444">Red</option>
-<option value="#a855f7">Purple</option>
+<option value="#3b82f6">
+Blue Accent
+</option>
+
+<option value="#22c55e">
+Green Accent
+</option>
+
+<option value="#ef4444">
+Red Accent
+</option>
 
 </select>
-
-</div>
-
-<div class="setting-item">
-
-<h3>QR Data</h3>
-
-<button onclick="exportQRData()">
-Export QR Data
-</button>
-
-<br><br>
-
-<input type="file" onchange="importQRData(event)">
 
 <br><br>
 
 <button onclick="clearQRData()">
 Clear QR Codes
 </button>
-
-</div>
 
 </div>
 
@@ -613,7 +612,7 @@ Clear QR Codes
 <h1>Daily Quests</h1>
 
 <p id="questTimer">
-NEW QUESTS IN: 24:00:00
+24:00:00
 </p>
 
 <div class="progress-bar">
@@ -642,15 +641,9 @@ NEW QUESTS IN: 24:00:00
 
 <div class="shop-item">
 
-<h2>Gradient</h2>
+<h3>Gradient Pack</h3>
 
-<p>
-Adds animated gradient backgrounds.
-</p>
-
-<p>
-10 QR Tokens
-</p>
+<p>10 QR Tokens</p>
 
 <button onclick="buyItem('gradient',10)">
 Buy
@@ -660,39 +653,13 @@ Buy
 
 <div class="shop-item">
 
-<h2>Themes</h2>
+<h3>Theme Pack</h3>
 
-<p>
-Unlock 4 extra themes.
-</p>
+<p>30 QR Tokens</p>
 
-<p>
-30 QR Tokens
-</p>
-
-<button onclick="buyItem('themes',30)">
+<button onclick="buyItem('theme',30)">
 Buy
 </button>
-
-</div>
-
-<div class="shop-item">
-
-<h2>Glow Effect</h2>
-
-<p>
-Makes QR cards glow.
-</p>
-
-<p>
-15 QR Tokens
-</p>
-
-<button onclick="buyItem('glow',15)">
-Buy
-</button>
-
-</div>
 
 </div>
 
@@ -710,8 +677,6 @@ Buy
 
 <div id="modalBody"></div>
 
-<br>
-
 <button onclick="closeModal()">
 Close
 </button>
@@ -723,9 +688,7 @@ Close
 <!-- AI -->
 
 <div id="aiButton">
-
 <img src="ai.png">
-
 </div>
 
 <div id="aiChat">
